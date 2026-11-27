@@ -1,0 +1,152 @@
+/* ==========================================================================
+   COMMUNITRADERS // COLORIMETRIA DARK & LIGHT TOKENS
+   Matched to colorimetria_dark.png & Colorimetria_light.png
+   ========================================================================== */
+
+:root {
+  /* Dark Mode Surfaces (colorimetria_dark.png) */
+  --bg-void: #0d0e14;
+  --bg-deep: #111219;
+  --bg-surface: #171620;
+  --bg-elevated: #1f1d2b;
+  --bg-glass: rgba(23, 22, 32, 0.92);
+  --bg-glass-strong: rgba(17, 18, 25, 0.98);
+  --bg-card-hover: #221f30;
+  --bg-input: #111219;
+  --bg-topbar: #111219;
+  --bg-sidebar: #111219;
+  --bg-tile: rgba(255, 255, 255, 0.035);
+  --bg-table: #13131c;
+
+  /* Signature Colorimetry Accents: Magenta-Pink #E81C7B -> Coral #F44E5F -> Sunset Amber #F7944D */
+  --accent: #e81c7b;
+  --accent-hover: #d4156e;
+  --accent-deep: #3d1628;
+  --accent-coral: #f7944d;
+  --accent-soft: rgba(232, 28, 123, 0.16);
+  --accent-border: rgba(232, 28, 123, 0.42);
+  --accent-glow: 0 8px 24px rgba(232, 28, 123, 0.34);
+
+  /* Complementary Neon Violet / Orchid (Risk Master Star & Strategy Builder) */
+  --neon-purple: #c04cfd;
+  --neon-purple-bright: #d580ff;
+  --neon-purple-soft: rgba(192, 76, 253, 0.14);
+  --neon-purple-border: rgba(192, 76, 253, 0.42);
+  --neon-purple-glow: 0 0 20px rgba(192, 76, 253, 0.32);
+
+  /* Semantic Trading Colors */
+  --profit: #10d884;
+  --profit-soft: rgba(16, 216, 132, 0.14);
+  --loss: #e81c7b;
+  --loss-soft: rgba(232, 28, 123, 0.16);
+  --neutral-soft: rgba(255, 255, 255, 0.05);
+
+  /* Gradients (Exact Reference Match) */
+  --grad-accent: linear-gradient(90deg, #e81c7b 0%, #f44e5f 52%, #f7944d 100%);
+  --grad-hud-line: linear-gradient(90deg, #e81c7b 0%, #f44e5f 52%, #f7944d 100%);
+  --grad-sidebar-active: linear-gradient(90deg, #d93870 0%, #9b4b71 100%);
+  --grad-hero-card: linear-gradient(125deg, #1b1322 0%, #171620 55%, #2b1322 100%);
+  --grad-league-banner: linear-gradient(90deg, #68133b 0%, #a53434 55%, #b5532a 100%);
+  --grad-backdrop:
+    radial-gradient(ellipse 65% 50% at 88% 12%, rgba(232, 28, 123, 0.16) 0%, transparent 62%),
+    radial-gradient(ellipse 52% 45% at 12% 88%, rgba(192, 76, 253, 0.12) 0%, transparent 64%),
+    linear-gradient(180deg, #0d0e14 0%, #111219 100%);
+
+  /* Borders & Dividers */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.16);
+  --border-accent: rgba(232, 28, 123, 0.45);
+  --border-focus: #e81c7b;
+
+  /* Typography */
+  --font-display: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
+  --font-heading: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
+  --font-login-title: 'Oxanium', 'Orbitron', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* Badge Tiers */
+  --tier-bronze: #cd7f32;
+  --tier-silver: #cbd5e1;
+  --tier-gold: #ffd166;
+  --tier-platinum: #d580ff;
+  --tier-legendary: #e81c7b;
+
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #b9b7c9;
+  --text-muted: #7f7c94;
+  --brand-ink: #ffffff;
+  --nav-active-text: #ffffff;
+  --switch-active-color: #10d884;
+
+  /* Radii & Shadows */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 18px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --shadow-modal: 0 32px 80px rgba(0, 0, 0, 0.85), 0 0 32px rgba(232, 28, 123, 0.18);
+
+  --sidebar-width: 244px;
+  --topbar-height: 70px;
+  --ease-snappy: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ==========================================================================
+   LIGHT MODE OVERRIDES (Matched to Colorimetria_light.png)
+   ========================================================================== */
+html[data-theme="light"] {
+  --bg-void: #f4f2fa;
+  --bg-deep: #ece9f6;
+  --bg-surface: #ffffff;
+  --bg-elevated: #faf9fd;
+  --bg-glass: #ffffff;
+  --bg-glass-strong: #ffffff;
+  --bg-card-hover: #fbf9fe;
+  --bg-input: #f8f7fc;
+  --bg-topbar: #ffffff;
+  --bg-sidebar: #ffffff;
+  --bg-tile: #f8f7fc;
+  --bg-table: #ffffff;
+
+  --accent: #e81c7b;
+  --accent-hover: #d4156e;
+  --accent-deep: #fde8f0;
+  --accent-soft: #fde8f0;
+  --accent-border: rgba(232, 28, 123, 0.32);
+  --accent-glow: 0 8px 22px rgba(232, 28, 123, 0.24);
+
+  --neon-purple: #9b30e8;
+  --neon-purple-bright: #831cd1;
+  --neon-purple-soft: rgba(155, 48, 232, 0.10);
+  --neon-purple-border: rgba(155, 48, 232, 0.28);
+  --neon-purple-glow: 0 8px 20px rgba(155, 48, 232, 0.16);
+
+  --profit: #059669;
+  --profit-soft: rgba(5, 150, 105, 0.10);
+
+  --grad-sidebar-active: linear-gradient(90deg, #fde8f0 0%, #fff0f6 100%);
+  --grad-hero-card: linear-gradient(125deg, #f6f4fb 0%, #f1eef9 58%, #fae5f0 100%);
+  --grad-league-banner: linear-gradient(90deg, #e02482 0%, #f16b62 55%, #f69d62 100%);
+  --grad-backdrop:
+    radial-gradient(ellipse 60% 45% at 88% 12%, rgba(232, 28, 123, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 52% 44% at 12% 88%, rgba(155, 48, 232, 0.08) 0%, transparent 62%),
+    linear-gradient(180deg, #f4f2fa 0%, #eeebf7 100%);
+
+  --border-subtle: #eae6f3;
+  --border-medium: #dcd6eb;
+
+  --text-primary: #14121d;
+  --text-secondary: #58526e;
+  --text-muted: #847d9c;
+  --brand-ink: #14121d;
+  --nav-active-text: #e81c7b;
+  --switch-active-color: #e81c7b;
+
+  --shadow-card: 0 10px 30px rgba(24, 18, 48, 0.06);
+  --shadow-modal: 0 24px 64px rgba(20, 16, 40, 0.18);
+}

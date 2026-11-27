@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Communitraders // Noir Vice HUD Design Mockups</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Orbitron:wght@600;700;800&family=Oxanium:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/tokens.css"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <style>
+    .mockup-page-wrap {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 32px 28px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    .mockup-hero {
+      padding: 34px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+      background:
+        radial-gradient(circle at 88% 18%, rgba(255, 0, 85, 0.18), transparent 45%),
+        radial-gradient(circle at 12% 88%, rgba(176, 38, 255, 0.16), transparent 45%),
+        var(--bg-glass);
+    }
+    .mockup-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3.2vw, 42px);
+      line-height: 1.15;
+    }
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+    .swatch-card {
+      padding: 14px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+    }
+    .swatch-box {
+      height: 54px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .mockups-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+    .mockup-frame-card {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .mockup-preview-box {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid rgba(176, 38, 255, 0.25);
+      background: #050508;
+      height: 330px;
+      position: relative;
+    }
+    .mockup-preview-box iframe {
+      width: 1440px;
+      height: 900px;
+      border: 0;
+      transform: scale(0.39);
+      transform-origin: top left;
+      pointer-events: none;
+    }
+    .profiles-compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 1100px) {
+      .palette-grid { grid-template-columns: repeat(2, 1fr); }
+      .mockups-grid, .profiles-compare-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="vice-backdrop"></div>
+  <div class="vice-grid-overlay"></div>
+
+  <header class="login-topbar">
+    <a href="index.html" class="brand-lockup">
+      <svg class="communi-logo-svg" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+        <rect x="2" y="2" width="16" height="16" rx="1.5" fill="#FF0055"/>
+        <rect x="26" y="2" width="16" height="16" rx="1.5" fill="#990033"/>
+        <rect x="2" y="26" width="16" height="16" rx="1.5" fill="#990033"/>
+        <rect x="26" y="26" width="16" height="16" rx="1.5" fill="#FF0055"/>
+        <path d="M19 8H25M25 8L22.8 5.8M25 8L22.8 10.2" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M25 36H19M19 36L21.2 33.8M19 36L21.2 38.2" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M34 19V25M34 25L31.8 22.8M34 25L36.2 22.8" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10 25V19M10 19L7.8 21.2M10 19L12.2 21.2" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="brand-text">
+        <strong>COMMUNI</strong>
+        <strong style="margin-top:2px;">TRADERS</strong>
+      </div>
+    </a>
+    <div class="login-topbar-actions">
+      <button type="button" class="theme-toggle-btn" id="theme-toggle-mockups" aria-label="Toggle Light/Dark Mode">☀ Light</button>
+      <a href="index.html?role=login" class="btn btn-ghost btn-sm">Login Screen</a>
+      <a href="index.html?role=follower&view=discover" class="btn btn-purple btn-sm">Follower Discover</a>
+      <a href="index.html?role=provider&view=challenge" class="btn btn-primary btn-sm">Signal Challenge</a>
+    </div>
+  </header>
+
+  <main class="mockup-page-wrap">
+    <section class="glass-card hud-panel mockup-hero">
+      <div style="max-width: 680px;">
+        <div class="hud-tag" style="margin-bottom:14px;">
+          <span class="hud-dot"></span>
+          <span>NOIR VICE HUD // DESIGN SYSTEM</span>
+        </div>
+        <h1>COMMUNITRADERS <span style="color:var(--accent);">VICE HUD EDITION</span></h1>
+        <p style="color:var(--text-secondary); margin-top:10px; font-size:14.5px;">
+          Obsidian Black &amp; <span class="font-mono" style="color:var(--accent);">#FF0055</span> architecture paired with electric neon purple (<span class="font-mono" style="color:var(--neon-purple-bright);">#B026FF</span>), Orbitron titles, original logos, updated Follower Discover, and the Signal Provider Challenge window.
+        </p>
+      </div>
+      <div>
+        <a href="index.html" class="btn btn-primary">Open Interactive App →</a>
+      </div>
+    </section>
+
+    <section class="glass-card hud-panel" style="padding:24px 26px;">
+      <div class="card-header-flex">
+        <div>
+          <h2 class="card-title-lg">00 // Reference Colorimetry Images (Dark &amp; Light)</h2>
+          <div style="font-size:12px; color:var(--text-secondary);">Source visual references embedded directly from Original page</div>
+        </div>
+        <a href="figma/design-tokens.json" class="btn btn-purple btn-sm" download>Download Figma Tokens JSON</a>
+      </div>
+      <div class="profiles-compare-grid">
+        <div class="setting-box" style="padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <strong class="font-heading" style="font-size:13px;">Dark Mode Colorimetry</strong>
+            <span class="badge badge-accent">colorimetria_dark.png</span>
+          </div>
+          <img src="Original page/colorimetria_dark.png" alt="Dark Mode Colorimetry Reference" style="width:100%; border-radius:10px; border:1px solid var(--border-subtle); display:block;"/>
+        </div>
+        <div class="setting-box" style="padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <strong class="font-heading" style="font-size:13px;">Light Mode Colorimetry</strong>
+            <span class="badge badge-purple">Colorimetria_light.png</span>
+          </div>
+          <img src="Original page/Colorimetria_light.png" alt="Light Mode Colorimetry Reference" style="width:100%; border-radius:10px; border:1px solid var(--border-subtle); display:block;"/>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass-card hud-panel" style="padding:24px 26px;">
+      <div class="card-header-flex">
+        <h2 class="card-title-lg">01 // Core Palette &amp; Neon Purple HUD Tokens</h2>
+        <span class="badge badge-purple">Orbitron + Plus Jakarta Sans + JetBrains Mono</span>
+      </div>
+      <div class="palette-grid">
+        <div class="swatch-card">
+          <div class="swatch-box" style="background:#0d0e14;"></div>
+          <strong>Dark Charcoal Void</strong>
+          <div class="font-mono" style="font-size:11px; color:var(--text-muted);">#0D0E14</div>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-box" style="background:#f4f2fa;"></div>
+          <strong>Light Lavender Pearl</strong>
+          <div class="font-mono" style="font-size:11px; color:var(--text-muted);">#F4F2FA</div>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-box" style="background:#e81c7b; box-shadow:0 0 18px rgba(232,28,123,0.4);"></div>
+          <strong>Magenta Rose</strong>
+          <div class="font-mono" style="font-size:11px; color:var(--text-muted);">#E81C7B</div>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-box" style="background:linear-gradient(90deg, #e81c7b, #f44e5f, #f7944d);"></div>
+          <strong>Sunset Coral Gradient</strong>
+          <div class="font-mono" style="font-size:11px; color:var(--text-muted);">#E81C7B → #F7944D</div>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-box" style="background:#c04cfd;"></div>
+          <strong>Orchid Violet</strong>
+          <div class="font-mono" style="font-size:11px; color:var(--text-muted);">#C04CFD</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass-card hud-panel" style="padding:24px 26px;">
+      <div class="card-header-flex">
+        <h2 class="card-title-lg">02 // Test User Profiles</h2>
+        <span class="badge badge-accent">Dual Role Auth</span>
+      </div>
+      <div class="profiles-compare-grid">
+        <div class="setting-box" style="padding:18px; border-color:var(--neon-purple-border);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <strong class="font-heading" style="font-size:15px;">IB Test</strong>
+            <span class="badge badge-purple">Follower</span>
+          </div>
+          <div class="font-mono" style="font-size:12.5px; color:var(--text-secondary); line-height:1.8;">
+            Account ID: <strong style="color:#ffffff;">2100224002</strong><br/>
+            Password: <strong style="color:#ffffff;">vice-follower</strong><br/>
+            Server: <strong style="color:#ffffff;">MT5 • Tradeview-Live</strong><br/>
+            Equity: <strong style="color:var(--profit);">$1,019.50</strong>
+          </div>
+          <a href="index.html?role=follower&view=discover" class="btn btn-purple btn-sm" style="margin-top:12px;">Open Follower Discover →</a>
+        </div>
+
+        <div class="setting-box" style="padding:18px; border-color:var(--accent-border);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <strong class="font-heading" style="font-size:15px;">Signal Test (StrategyForex2)</strong>
+            <span class="badge badge-accent">Signal Provider</span>
+          </div>
+          <div class="font-mono" style="font-size:12.5px; color:var(--text-secondary); line-height:1.8;">
+            Account ID: <strong style="color:#ffffff;">2100224001</strong><br/>
+            Password: <strong style="color:#ffffff;">vice-provider</strong><br/>
+            Server: <strong style="color:#ffffff;">MT5 • Tradeview-Live</strong><br/>
+            Equity: <strong style="color:var(--profit);">$45,910.80 (Risk: 1)</strong>
+          </div>
+          <a href="index.html?role=provider&view=challenge" class="btn btn-primary btn-sm" style="margin-top:12px;">Open Signal Challenge →</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="card-header-flex">
+        <h2 class="card-title-lg" style="font-size:20px;">03 // All 8 Application Views</h2>
+      </div>
+      <div class="mockups-grid">
+        <article class="glass-card hud-panel mockup-frame-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong class="font-heading" style="font-size:14px;">1. Logon View</strong>
+              <div style="font-size:12px; color:var(--text-muted);">logon.png • Executive Dual Role Login</div>
+            </div>
+            <a href="index.html?role=login" class="btn btn-ghost btn-sm">Open Live ↗</a>
+          </div>
+          <div class="mockup-preview-box"><iframe src="index.html?role=login" loading="lazy" title="Login Mockup"></iframe></div>
+        </article>
+
+        <article class="glass-card hud-panel mockup-frame-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong class="font-heading" style="font-size:14px;">2. Follower Dashboard</strong>
+              <div style="font-size:12px; color:var(--text-muted);">dashboard_follower_view.png</div>
+            </div>
+            <a href="index.html?role=follower&view=following" class="btn btn-purple btn-sm">Open Live ↗</a>
+          </div>
+          <div class="mockup-preview-box"><iframe src="index.html?role=follower&view=following" loading="lazy" title="Follower Dashboard Mockup"></iframe></div>
+        </article>
+
+        <article class="glass-card hud-panel mockup-frame-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong class="font-heading" style="font-size:14px;">3. Follower Discover (Updated)</strong>
+              <div style="font-size:12px; color:var(--text-muted);">discover_follower_view.png • HUD Banner &amp; Filters</div>
+            </div>
+            <a href="index.html?role=follower&view=discover" class="btn btn-purple btn-sm">Open Live ↗</a>
+          </div>
+          <div class="mockup-preview-box"><iframe src="index.html?role=follower&view=discover" loading="lazy" title="Follower Discover Mockup"></iframe></div>
+        </article>
+
+        <article class="glass-card hud-panel mockup-frame-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong class="font-heading" style="font-size:14px;">4. Follower Orders</strong>
+              <div style="font-size:12px; color:var(--text-muted);">orders_follower_view.png</div>
+            </div>
+            <a href="index.html?role=follower&view=orders" class="btn btn-purple btn-sm">Open Live ↗</a>
+          </div>
+          <div class="mockup-preview-box"><iframe src="index.html?role=follower&view=orders" loading="lazy" title="Follower Orders Mockup"></iframe></div>
+        </article>
+
+        <article class="glass-card hud-panel mockup-frame-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong class="font-heading" style="font-size:14px;">5. Signal Provider Dashboard</strong>
+              <div style="font-size:12px; color:var(--text-muted);">dashboard_signal_provider_view.png</div>
+            </div>
+            <a href="index.html?role=provider&view=profile" class="btn btn-primary btn-sm">Open Live ↗</a>
+          </div>
+          <div class="mockup-preview-box"><iframe src="index.html?role=provider&view=profile" loading="lazy" title="Signal Provider Dashboard Mockup"></iframe></div>
+        </article>
+
+        <article class="glass-card hud-panel mockup-frame-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong class="font-heading" style="font-size:14px;">6. Signal Provider Challenge (New)</strong>
+              <div style="font-size:12px; color:var(--text-muted);">Milestones, Missions &amp; Syndicate Leaderboard</div>
+            </div>
+            <a href="index.html?role=provider&view=challenge" class="btn btn-primary btn-sm">Open Live ↗</a>
+          </div>
+          <div class="mockup-preview-box"><iframe src="index.html?role=provider&view=challenge" loading="lazy" title="Signal Provider Challenge Mockup"></iframe></div>
+        </article>
+
+        <article class="glass-card hud-panel mockup-frame-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong class="font-heading" style="font-size:14px;">7. Signal Provider Followers</strong>
+              <div style="font-size:12px; color:var(--text-muted);">followers_signal_provider_view.png</div>
+            </div>
+            <a href="index.html?role=provider&view=followers" class="btn btn-primary btn-sm">Open Live ↗</a>
+          </div>
+          <div class="mockup-preview-box"><iframe src="index.html?role=provider&view=followers" loading="lazy" title="Signal Provider Followers Mockup"></iframe></div>
+        </article>
+
+        <article class="glass-card hud-panel mockup-frame-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong class="font-heading" style="font-size:14px;">8. Signal Provider Orders</strong>
+              <div style="font-size:12px; color:var(--text-muted);">orders_signal_provider_view.png</div>
+            </div>
+            <a href="index.html?role=provider&view=orders" class="btn btn-primary btn-sm">Open Live ↗</a>
+          </div>
+          <div class="mockup-preview-box"><iframe src="index.html?role=provider&view=orders" loading="lazy" title="Signal Provider Orders Mockup"></iframe></div>
+        </article>
+
+        <article class="glass-card hud-panel mockup-frame-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong class="font-heading" style="font-size:14px;">9. Public Global Leaderboards</strong>
+              <div style="font-size:12px; color:var(--text-muted);">8 Ranking Tabs • 5 Timeframes • Public Profiles</div>
+            </div>
+            <a href="index.html?role=leaderboards" class="btn btn-purple btn-sm">Open Live ↗</a>
+          </div>
+          <div class="mockup-preview-box"><iframe src="index.html?role=leaderboards" loading="lazy" title="Global Leaderboards Mockup"></iframe></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Section 04: Initial Deliverables & Technical/Data Architecture -->
+    <section class="glass-card hud-panel" style="padding:26px 28px;">
+      <div class="card-header-flex">
+        <div>
+          <h2 class="card-title-lg">04 // Gamification Deliverables &amp; Technical / Data Requirements</h2>
+          <div style="font-size:12.5px; color:var(--text-secondary);">MultiMAM &amp; Communitraders Ecosystem Specification</div>
+        </div>
+        <span class="badge badge-accent">Yimmit Design Reference</span>
+      </div>
+
+      <div class="challenges-catalog-grid">
+        <div class="setting-box" style="padding:16px;">
+          <strong class="font-heading" style="font-size:13px; color:var(--neon-purple-bright);">1. Badges &amp; Achievements (10 x 5 Tiers)</strong>
+          <p style="font-size:12px; color:var(--text-secondary); margin-top:6px;">
+            Bronze → Silver → Gold → Platinum → Legendary tiers across Top Money Manager, Top Signal Provider, Best Risk Manager, TP Hunter (100 TPs), Capital King, Crowd Favorite, Consistency Master, Rising Star, Drawdown Defender, and Veteran Manager.
+          </p>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:8px;">
+            <strong>Data Req:</strong> Audited MT4/MT5 closed-trade ledger, daily equity snapshots, profit-to-DD calculation, anti-churn volume filter.
+          </div>
+        </div>
+
+        <div class="setting-box" style="padding:16px;">
+          <strong class="font-heading" style="font-size:13px; color:var(--neon-purple-bright);">2. Global Leaderboards &amp; Public Profiles</strong>
+          <p style="font-size:12px; color:var(--text-secondary); margin-top:6px;">
+            8 ranking tabs (Top Money Managers, Top Signal Providers, Best Risk Managers, Capital Leaders, Most Followed, Fastest-Growing, Most Consistent, Rising Stars) filtered by Weekly, Monthly, Quarterly, Annual, and All-Time.
+          </p>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:8px;">
+            <strong>Data Req:</strong> Materialized time-windowed leaderboard views, unique manager referral IDs, Open Account &amp; Join Strategy deep links.
+          </div>
+        </div>
+
+        <div class="setting-box" style="padding:16px;">
+          <strong class="font-heading" style="font-size:13px; color:var(--neon-purple-bright);">3. Season Challenges (7 Programs)</strong>
+          <p style="font-size:12px; color:var(--text-secondary); margin-top:6px;">
+            30-Day Challenge, Demo to Live Challenge, Risk Master Challenge, Build Your Fund, Strategy Builder, Manager of the Month, and Manager League (Monthly/Quarterly/Annual).
+          </p>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:8px;">
+            <strong>Compliance Gate:</strong> Live account sponsorships and financial rewards require Tradeview risk &amp; compliance approval before payout.
+          </div>
+        </div>
+
+        <div class="setting-box" style="padding:16px;">
+          <strong class="font-heading" style="font-size:13px; color:var(--neon-purple-bright);">4. Manager Tim &amp; Client Acquisition</strong>
+          <p style="font-size:12px; color:var(--text-secondary); margin-top:6px;">
+            Proactive event-driven notifications for badge unlocks, Top 10 rank ups, and new seasons—paired with shareable cards, social sharing (X/LinkedIn/Telegram), and referral attribution.
+          </p>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:8px;">
+            <strong>Data Req:</strong> Event webhook stream (badge_unlocked, rank_changed, season_started) + UTM/referral attribution ledger.
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    (function () {
+      const btn = document.getElementById('theme-toggle-mockups');
+      let theme = localStorage.getItem('communitraders_theme') || 'dark';
+      function sync() {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('communitraders_theme', theme);
+        btn.textContent = theme === 'dark' ? '☀ Light' : '🌙 Dark';
+        document.querySelectorAll('iframe').forEach((f) => {
+          try { f.contentDocument?.documentElement?.setAttribute('data-theme', theme); } catch (_) {}
+        });
+      }
+      btn.addEventListener('click', () => {
+        theme = theme === 'dark' ? 'light' : 'dark';
+        sync();
+      });
+      sync();
+    })();
+  </script>
+</body>
+</html>
