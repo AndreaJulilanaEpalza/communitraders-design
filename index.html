@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Communitraders — Tradeview Markets</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Orbitron:wght@600;700;800&family=Oxanium:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/tokens.css"/>
-  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Manrope:wght@600;700;800&family=Orbitron:wght@600;700;800&family=Oxanium:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
+
 <body>
   <div class="vice-backdrop"></div>
   <div class="vice-grid-overlay"></div>
@@ -18,12 +22,13 @@
        VIEW 1: FUTURISTIC GTA-STYLE TRADING GAME LOGIN (ORIGINAL LOGOS)
        ===================================================================== -->
   <div id="login-shell" class="login-shell">
+    <div class="login-boss-bg" aria-hidden="true"></div>
     <header class="login-topbar">
       <!-- Original Tradeview Markets Logo -->
       <div class="tradeview-brand">
         <svg width="36" height="26" viewBox="0 0 42 30" fill="none" aria-hidden="true">
-          <path d="M2 3H11.5L17 19L22.5 3H30L20.5 27H13.5L2 3Z" fill="#E11D2E"/>
-          <path class="tv-wing-light" d="M18 3H25L29 14.5L33.5 3H40.5L31.5 27H25.5L18 3Z"/>
+          <path d="M2 3H11.5L17 19L22.5 3H30L20.5 27H13.5L2 3Z" fill="#E11D2E" />
+          <path class="tv-wing-light" d="M18 3H25L29 14.5L33.5 3H40.5L31.5 27H25.5L18 3Z" />
         </svg>
         <div class="tv-wordmark">
           <span class="tv-main">TRADE<b>V</b>IEW</span>
@@ -32,12 +37,15 @@
       </div>
 
       <div class="login-topbar-actions">
-        <button type="button" class="theme-toggle-btn" id="theme-toggle-login" aria-label="Toggle Light/Dark Mode">
-          ☀ Light
-        </button>
-        <button type="button" class="topbar-link" id="login-leaderboards-btn">🏆 Global Leaderboards</button>
-        <a href="mockups.html" class="topbar-link">Mockups</a>
-        <button type="button" class="topbar-link" onclick="alert('Communitraders User Manual: Sign in with your MetaTrader account as a Follower or Signal Provider, or select one of the test profiles below.')">
+        <div class="mode-switcher-pill" role="group" aria-label="Interface Mode">
+          <button type="button" class="mode-switch-btn" data-set-theme="dark">Dark</button>
+          <button type="button" class="mode-switch-btn" data-set-theme="light">Light</button>
+          <button type="button" class="mode-switch-btn" data-set-theme="serious">Serious Mode</button>
+        </div>
+        <button type="button" class="topbar-link" id="login-leaderboards-btn">Global Leaderboards</button>
+        <!-- <a href="mockups.html" class="topbar-link">Mockups</a> -->
+        <button type="button" class="topbar-link"
+          onclick="alert('Communitraders User Manual: Sign in with your MetaTrader account as a Follower or Signal Provider, or select one of the test profiles below.')">
           User Manual
         </button>
         <span class="topbar-link">ENG ▾</span>
@@ -52,7 +60,7 @@
         <span class="ticker-pair"><strong>AUDJPY</strong> 99.84 <span class="ticker-up">+0.34%</span></span>
         <span class="ticker-pair"><strong>XAUUSD</strong> 2648.40 <span class="ticker-up">+1.12%</span></span>
       </div>
-      <span style="color:var(--neon-purple-bright);">● SYNDICATE SERVER // ONLINE</span>
+      <span id="login-ticker-status" style="color:var(--neon-purple-bright);">● SYNDICATE SERVER // ONLINE</span>
     </div>
 
     <main class="login-main">
@@ -61,15 +69,20 @@
         <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
           <!-- Original CommuniTraders 4-Square Logo -->
           <div class="brand-lockup">
-            <svg class="communi-logo-svg" style="width:42px; height:42px;" viewBox="0 0 44 44" fill="none" aria-hidden="true">
-              <rect x="2" y="2" width="16" height="16" rx="1.5" fill="#FF0055"/>
-              <rect x="26" y="2" width="16" height="16" rx="1.5" fill="#990033"/>
-              <rect x="2" y="26" width="16" height="16" rx="1.5" fill="#990033"/>
-              <rect x="26" y="26" width="16" height="16" rx="1.5" fill="#FF0055"/>
-              <path d="M19 8H25M25 8L22.8 5.8M25 8L22.8 10.2" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M25 36H19M19 36L21.2 33.8M19 36L21.2 38.2" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M34 19V25M34 25L31.8 22.8M34 25L36.2 22.8" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M10 25V19M10 19L7.8 21.2M10 19L12.2 21.2" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg class="communi-logo-svg" style="width:42px; height:42px;" viewBox="0 0 44 44" fill="none"
+              aria-hidden="true">
+              <rect x="2" y="2" width="16" height="16" rx="1.5" fill="#FF0055" />
+              <rect x="26" y="2" width="16" height="16" rx="1.5" fill="#990033" />
+              <rect x="2" y="26" width="16" height="16" rx="1.5" fill="#990033" />
+              <rect x="26" y="26" width="16" height="16" rx="1.5" fill="#FF0055" />
+              <path d="M19 8H25M25 8L22.8 5.8M25 8L22.8 10.2" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M25 36H19M19 36L21.2 33.8M19 36L21.2 38.2" stroke="#FFFFFF" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M34 19V25M34 25L31.8 22.8M34 25L36.2 22.8" stroke="#FFFFFF" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M10 25V19M10 19L7.8 21.2M10 19L12.2 21.2" stroke="#FFFFFF" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round" />
             </svg>
             <div class="brand-text hero-size">
               <strong>COMMUNI</strong>
@@ -79,16 +92,17 @@
 
           <div class="hud-tag">
             <span class="hud-dot"></span>
-            <span>SEASON</span>
+            <span id="login-hero-tag">SEASON</span>
           </div>
         </div>
 
-        <h1>
+        <h1 id="login-hero-title">
           TRADE LIKE A BOSS. <span class="highlight-vice">OWN THE SYNDICATE.</span>
         </h1>
 
-        <p class="login-hero-sub">
-          Enter Tradeview's next-gen copy-trading arena. Mirror elite strategies as a <strong>Follower</strong> or command followers as a <strong>Signal Provider</strong>.
+        <p class="login-hero-sub" id="login-hero-sub">
+          Enter Tradeview's next-gen copy-trading arena. Mirror elite strategies as a <strong>Follower</strong> or
+          command followers as a <strong>Signal Provider</strong>.
         </p>
 
         <!-- Futuristic GTA Trading Game Visual Stage -->
@@ -96,46 +110,49 @@
           <svg viewBox="0 0 640 190" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
             <defs>
               <linearGradient id="stageSun" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#ff0055"/>
-                <stop offset="100%" stop-color="#b026ff"/>
+                <stop offset="0%" stop-color="#ff0055" />
+                <stop offset="100%" stop-color="#b026ff" />
               </linearGradient>
               <linearGradient id="stageCandle" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#00ffa3"/>
-                <stop offset="100%" stop-color="#b026ff"/>
+                <stop offset="0%" stop-color="#00ffa3" />
+                <stop offset="100%" stop-color="#b026ff" />
               </linearGradient>
             </defs>
             <!-- Glowing Horizon Sun -->
-            <circle cx="480" cy="108" r="64" fill="url(#stageSun)" opacity="0.88"/>
-            <rect x="400" y="114" width="160" height="4" fill="#170a28"/>
-            <rect x="400" y="125" width="160" height="5" fill="#170a28"/>
-            <rect x="400" y="138" width="160" height="6" fill="#120820"/>
+            <circle class="stage-horizon-sun" cx="480" cy="108" r="64" fill="url(#stageSun)" opacity="0.88" />
+            <rect x="400" y="114" width="160" height="4" fill="#170a28" />
+            <rect x="400" y="125" width="160" height="5" fill="#170a28" />
+            <rect x="400" y="138" width="160" height="6" fill="#120820" />
             <!-- Cyber Skyline -->
-            <path d="M0 190 L0 132 L28 132 L28 96 L60 96 L60 138 L86 138 L86 72 L124 72 L124 118 L152 118 L152 54 L186 54 L186 128 L220 128 L220 86 L252 86 L252 140 L296 140 L296 68 L334 68 L334 134 L380 134 L380 100 L412 100 L412 148 L548 148 L548 82 L584 82 L584 122 L614 122 L614 96 L640 96 L640 190 Z" fill="#090712"/>
+            <path
+              d="M0 190 L0 132 L28 132 L28 96 L60 96 L60 138 L86 138 L86 72 L124 72 L124 118 L152 118 L152 54 L186 54 L186 128 L220 128 L220 86 L252 86 L252 140 L296 140 L296 68 L334 68 L334 134 L380 134 L380 100 L412 100 L412 148 L548 148 L548 82 L584 82 L584 122 L614 122 L614 96 L640 96 L640 190 Z"
+              fill="#090712" />
             <!-- Neon Laser Grid Floor -->
-            <line x1="0" y1="158" x2="640" y2="158" stroke="#ff0055" stroke-width="1.5" opacity="0.75"/>
-            <line x1="0" y1="170" x2="640" y2="170" stroke="#b026ff" stroke-width="1" opacity="0.5"/>
-            <line x1="0" y1="182" x2="640" y2="182" stroke="#b026ff" stroke-width="1" opacity="0.35"/>
+            <line x1="0" y1="158" x2="640" y2="158" stroke="#ff0055" stroke-width="1.5" opacity="0.75" />
+            <line x1="0" y1="170" x2="640" y2="170" stroke="#b026ff" stroke-width="1" opacity="0.5" />
+            <line x1="0" y1="182" x2="640" y2="182" stroke="#b026ff" stroke-width="1" opacity="0.35" />
             <!-- Floating Holographic Candlesticks -->
-            <g opacity="0.85">
-              <line x1="88" y1="36" x2="88" y2="90" stroke="#b026ff" stroke-width="2"/>
-              <rect x="82" y="48" width="12" height="28" rx="2" fill="#b026ff"/>
-              <line x1="118" y1="26" x2="118" y2="82" stroke="#00ffa3" stroke-width="2"/>
-              <rect x="112" y="36" width="12" height="32" rx="2" fill="url(#stageCandle)"/>
-              <line x1="148" y1="42" x2="148" y2="96" stroke="#ff0055" stroke-width="2"/>
-              <rect x="142" y="52" width="12" height="24" rx="2" fill="#ff0055"/>
-              <line x1="178" y1="18" x2="178" y2="72" stroke="#00ffa3" stroke-width="2"/>
-              <rect x="172" y="26" width="12" height="34" rx="2" fill="#00ffa3"/>
-              <path d="M56 76 L88 54 L118 44 L148 58 L178 24 L224 14" stroke="#ffffff" stroke-width="2" fill="none" stroke-dasharray="4 3" opacity="0.8"/>
+            <g class="stage-candles-group" opacity="0.85">
+              <line x1="88" y1="36" x2="88" y2="90" stroke="#b026ff" stroke-width="2" />
+              <rect x="82" y="48" width="12" height="28" rx="2" fill="#b026ff" />
+              <line x1="118" y1="26" x2="118" y2="82" stroke="#00ffa3" stroke-width="2" />
+              <rect x="112" y="36" width="12" height="32" rx="2" fill="url(#stageCandle)" />
+              <line x1="148" y1="42" x2="148" y2="96" stroke="#ff0055" stroke-width="2" />
+              <rect x="142" y="52" width="12" height="24" rx="2" fill="#ff0055" />
+              <line x1="178" y1="18" x2="178" y2="72" stroke="#00ffa3" stroke-width="2" />
+              <rect x="172" y="26" width="12" height="34" rx="2" fill="#00ffa3" />
+              <path d="M56 76 L88 54 L118 44 L148 58 L178 24 L224 14" stroke="#ffffff" stroke-width="2" fill="none"
+                stroke-dasharray="4 3" opacity="0.8" />
             </g>
           </svg>
           <div class="stage-hud-overlay">
             <div class="stage-hud-top">
-              <span class="stage-chip purple">HOLO-DESK // MT4 &amp; MT5</span>
-              <span class="stage-chip">12 STRATEGIES ONLINE</span>
+              <span class="stage-chip purple" id="stage-chip-left">HOLO-DESK // MT4 &amp; MT5</span>
+              <span class="stage-chip" id="stage-chip-right">12 STRATEGIES ONLINE</span>
             </div>
             <div class="stage-hud-bottom">
-              <div class="stage-rank-title">COMMUNITRADERS COPY-TRADING TERMINAL</div>
-              <span class="stage-chip" style="border-color:rgba(0,255,163,0.5); color:#00ffa3;">AVG WIN RATE 68.5%</span>
+              <div class="stage-rank-title" id="stage-rank-title">COMMUNITRADERS COPY-TRADING TERMINAL</div>
+              <span class="stage-chip profit">AVG WIN RATE 68.5%</span>
             </div>
           </div>
         </div>
@@ -143,7 +160,7 @@
         <!-- GTA Class Select (2 Test User Profiles) -->
         <div class="demo-accounts-box hud-panel">
           <div class="demo-accounts-header">
-            <span>Select Trader Class // 1-Click Test Login</span>
+            <span id="demo-accounts-heading">Select Trader Class // 1-Click Test Login</span>
           </div>
           <div class="demo-accounts-grid">
             <button type="button" class="demo-user-pill purple-pill" id="demo-btn-follower">
@@ -151,7 +168,7 @@
                 <span>IB Test</span>
                 <span class="badge badge-purple">Follower</span>
               </div>
-              <div class="demo-user-class">CLASS // MIRROR OPS</div>
+              <div class="demo-user-class" id="demo-follower-class">CLASS // MIRROR OPS</div>
               <div class="demo-user-meta">ID: 2100224002 • $1,019.50</div>
             </button>
 
@@ -160,7 +177,7 @@
                 <span>Signal Test</span>
                 <span class="badge badge-accent">Signal Provider</span>
               </div>
-              <div class="demo-user-class">CLASS // SYNDICATE LEAD</div>
+              <div class="demo-user-class" id="demo-provider-class">CLASS // SYNDICATE LEAD</div>
               <div class="demo-user-meta">ID: 2100224001 • $45,910.80</div>
             </button>
           </div>
@@ -170,13 +187,15 @@
       <!-- Right Futuristic Terminal Login Card -->
       <section class="glass-card hud-panel login-card">
         <div class="login-terminal-bar">
-          <span>TERMINAL // AUTH GATEWAY</span>
+          <span id="login-terminal-label">TERMINAL // AUTH GATEWAY</span>
           <span style="color:var(--profit);">● ENCRYPTED</span>
         </div>
 
         <h2 class="login-card-title">Login to your account</h2>
         <p class="login-card-desc">
-          Access Communitraders as a Follower or Signal Provider using your MetaTrader credentials. Need provider access? Register <a href="#register" onclick="event.preventDefault(); document.getElementById('login-role').value='provider';">here</a>.
+          Access Communitraders as a Follower or Signal Provider using your MetaTrader credentials. Need provider
+          access? Register <a href="#register"
+            onclick="event.preventDefault(); document.getElementById('login-role').value='provider';">here</a>.
         </p>
 
         <form id="login-form" class="login-form" novalidate>
@@ -184,14 +203,17 @@
 
           <div class="form-group">
             <label class="form-label" for="login-account">MetaTrader account number</label>
-            <input type="text" id="login-account" class="form-control font-mono" value="2100224002" placeholder="e.g. 2100224002"/>
+            <input type="text" id="login-account" class="form-control font-mono" value="2100224002"
+              placeholder="e.g. 2100224002" />
           </div>
 
           <div class="form-group">
             <label class="form-label" for="login-password">Password</label>
             <div class="input-with-icon">
-              <input type="password" id="login-password" class="form-control" value="vice-follower" placeholder="Enter MetaTrader password"/>
-              <button type="button" class="input-icon-btn" id="toggle-password-btn" title="Show/Hide password">👁</button>
+              <input type="password" id="login-password" class="form-control" value="vice-follower"
+                placeholder="Enter MetaTrader password" />
+              <button type="button" class="input-icon-btn" id="toggle-password-btn"
+                title="Show/Hide password">👁</button>
             </div>
           </div>
 
@@ -226,11 +248,14 @@
           </div>
 
           <label class="terms-check">
-            <input type="checkbox" id="login-terms" checked/>
-            <span>By checking this box, I declare that I agree to the terms of the Communitraders Acknowledgement and Agreement, which states that Tradeview Financial Markets S.A.C has made no representation regarding the potential profitability of any signal service.</span>
+            <input type="checkbox" id="login-terms" checked />
+            <span>By checking this box, I declare that I agree to the terms of the Communitraders Acknowledgement and
+              Agreement, which states that Tradeview Financial Markets S.A.C has made no representation regarding the
+              potential profitability of any signal service.</span>
           </label>
 
-          <button type="submit" class="btn btn-primary login-submit-btn">Enter Vice Terminal →</button>
+          <button type="submit" class="btn btn-primary login-submit-btn" id="login-submit-btn">Enter Vice Terminal
+            →</button>
         </form>
       </section>
     </main>
@@ -242,17 +267,22 @@
   <div id="app-shell" class="app-shell hidden">
     <header class="app-topbar">
       <div class="topbar-left">
-        <button type="button" class="btn btn-ghost btn-icon mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Menu">☰</button>
+        <button type="button" class="btn btn-ghost btn-icon mobile-menu-btn" id="mobile-menu-btn"
+          aria-label="Toggle Menu">☰</button>
         <a href="index.html" class="brand-lockup">
           <svg class="communi-logo-svg" viewBox="0 0 44 44" fill="none" aria-hidden="true">
-            <rect x="2" y="2" width="16" height="16" rx="1.5" fill="#FF0055"/>
-            <rect x="26" y="2" width="16" height="16" rx="1.5" fill="#990033"/>
-            <rect x="2" y="26" width="16" height="16" rx="1.5" fill="#990033"/>
-            <rect x="26" y="26" width="16" height="16" rx="1.5" fill="#FF0055"/>
-            <path d="M19 8H25M25 8L22.8 5.8M25 8L22.8 10.2" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M25 36H19M19 36L21.2 33.8M19 36L21.2 38.2" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M34 19V25M34 25L31.8 22.8M34 25L36.2 22.8" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M10 25V19M10 19L7.8 21.2M10 19L12.2 21.2" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="2" y="2" width="16" height="16" rx="1.5" fill="#FF0055" />
+            <rect x="26" y="2" width="16" height="16" rx="1.5" fill="#990033" />
+            <rect x="2" y="26" width="16" height="16" rx="1.5" fill="#990033" />
+            <rect x="26" y="26" width="16" height="16" rx="1.5" fill="#FF0055" />
+            <path d="M19 8H25M25 8L22.8 5.8M25 8L22.8 10.2" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M25 36H19M19 36L21.2 33.8M19 36L21.2 38.2" stroke="#FFFFFF" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M34 19V25M34 25L31.8 22.8M34 25L36.2 22.8" stroke="#FFFFFF" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M10 25V19M10 19L7.8 21.2M10 19L12.2 21.2" stroke="#FFFFFF" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round" />
           </svg>
           <div class="brand-text">
             <strong>COMMUNI</strong>
@@ -269,9 +299,11 @@
           <button type="button" class="role-switch-btn" id="switch-to-provider">Signal Provider</button>
         </div>
 
-        <button type="button" class="theme-toggle-btn" id="theme-toggle-app" aria-label="Toggle Light/Dark Mode">
-          ☀ Light
-        </button>
+        <div class="mode-switcher-pill" role="group" aria-label="Interface Mode">
+          <button type="button" class="mode-switch-btn" data-set-theme="dark">Dark</button>
+          <button type="button" class="mode-switch-btn" data-set-theme="light">Light</button>
+          <button type="button" class="mode-switch-btn" data-set-theme="serious">Serious Mode</button>
+        </div>
 
         <span class="topbar-link" style="font-size:12px;">ENG ▾</span>
 
@@ -292,8 +324,15 @@
             <button type="button" class="dropdown-item" id="dropdown-switch-provider">
               Switch to Provider (Signal Test)
             </button>
-            <button type="button" class="dropdown-item" id="dropdown-theme-toggle">
-              Switch to Light Mode
+            <div class="dropdown-divider"></div>
+            <button type="button" class="dropdown-item" data-set-theme="dark">
+              Dark Mode
+            </button>
+            <button type="button" class="dropdown-item" data-set-theme="light">
+              Light Mode
+            </button>
+            <button type="button" class="dropdown-item" data-set-theme="serious">
+              Serious Mode
             </button>
             <a href="mockups.html" class="dropdown-item">
               View Mockups Board
@@ -319,25 +358,28 @@
       <svg viewBox="0 0 100 100" width="56" height="56" aria-hidden="true">
         <defs>
           <linearGradient id="agentSunsetLens" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#ffd166"/>
-            <stop offset="50%" stop-color="#ff0055"/>
-            <stop offset="100%" stop-color="#b026ff"/>
+            <stop offset="0%" stop-color="#ffd166" />
+            <stop offset="50%" stop-color="#ff0055" />
+            <stop offset="100%" stop-color="#b026ff" />
           </linearGradient>
         </defs>
-        <rect width="100" height="100" fill="#141120"/>
-        <path d="M16 100 C18 74 82 74 84 100 Z" fill="#0b0912"/>
-        <path d="M38 74 L50 88 L62 74" stroke="#282338" stroke-width="3" fill="none"/>
-        <rect x="42" y="60" width="16" height="16" rx="6" fill="#d99a6c"/>
-        <path d="M31 44 C31 24 69 24 69 44 C69 62 59 69 50 69 C41 69 31 62 31 44 Z" fill="#e5aa7d"/>
-        <path d="M29 41 C28 22 44 15 58 18 C68 20 72 30 70 40 C64 30 38 28 29 41 Z" fill="#2c2936"/>
-        <path d="M34 25 Q50 18 64 25" stroke="#6c687c" stroke-width="2" fill="none" opacity="0.7"/>
-        <path d="M33 38 L48 38 L46 49 C45 52 35 52 33 47 Z" fill="url(#agentSunsetLens)" stroke="#ffd166" stroke-width="1.6"/>
-        <path d="M52 38 L67 38 L67 47 C65 52 55 52 54 49 Z" fill="url(#agentSunsetLens)" stroke="#ffd166" stroke-width="1.6"/>
-        <line x1="48" y1="39" x2="52" y2="39" stroke="#ffd166" stroke-width="1.8"/>
-        <path d="M43 56 Q50 61 57 56" stroke="#8f4e32" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <rect width="100" height="100" fill="#141120" />
+        <path d="M16 100 C18 74 82 74 84 100 Z" fill="#0b0912" />
+        <path d="M38 74 L50 88 L62 74" stroke="#282338" stroke-width="3" fill="none" />
+        <rect x="42" y="60" width="16" height="16" rx="6" fill="#d99a6c" />
+        <path d="M31 44 C31 24 69 24 69 44 C69 62 59 69 50 69 C41 69 31 62 31 44 Z" fill="#e5aa7d" />
+        <path d="M29 41 C28 22 44 15 58 18 C68 20 72 30 70 40 C64 30 38 28 29 41 Z" fill="#2c2936" />
+        <path d="M34 25 Q50 18 64 25" stroke="#6c687c" stroke-width="2" fill="none" opacity="0.7" />
+        <path d="M33 38 L48 38 L46 49 C45 52 35 52 33 47 Z" fill="url(#agentSunsetLens)" stroke="#ffd166"
+          stroke-width="1.6" />
+        <path d="M52 38 L67 38 L67 47 C65 52 55 52 54 49 Z" fill="url(#agentSunsetLens)" stroke="#ffd166"
+          stroke-width="1.6" />
+        <line x1="48" y1="39" x2="52" y2="39" stroke="#ffd166" stroke-width="1.8" />
+        <path d="M43 56 Q50 61 57 56" stroke="#8f4e32" stroke-width="2.2" fill="none" stroke-linecap="round" />
       </svg>
     </div>
-    <button type="button" class="agent-greeting-close" id="agent-greeting-close" aria-label="Dismiss greeting">✕</button>
+    <button type="button" class="agent-greeting-close" id="agent-greeting-close"
+      aria-label="Dismiss greeting">✕</button>
     <p class="agent-greeting-text">¿Tienes alguna pregunta? Estoy aquí para ayudarte.</p>
     <div class="agent-greeting-cta">Chat with Manager Tim ↗</div>
   </div>
@@ -345,32 +387,38 @@
   <!-- Floating Manager Tim Interactive Assistant -->
   <button type="button" class="social-hub-fab hidden" id="social-hub-fab">
     <span class="agent-status-dot"></span>
-    <span>Manager Tim</span>
+    <span id="social-hub-fab-label">Manager Tim</span>
     <span class="social-hub-count" id="social-hub-count">1</span>
   </button>
 
   <div class="glass-card hud-panel social-hub-drawer hidden" id="social-hub-drawer">
     <div class="drawer-header">
       <div class="agent-header-title">
-        <img alt="" style="width:26px; height:26px; border-radius:50%; border:1.5px solid var(--accent);" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23141120'/%3E%3Cpath d='M16 100 C18 74 82 74 84 100 Z' fill='%230b0912'/%3E%3Cpath d='M31 44 C31 24 69 24 69 44 C69 62 59 69 50 69 C41 69 31 62 31 44 Z' fill='%23e5aa7d'/%3E%3Cpath d='M29 41 C28 22 44 15 58 18 C68 20 72 30 70 40 C64 30 38 28 29 41 Z' fill='%232c2936'/%3E%3Cpath d='M33 38 L48 38 L46 49 C45 52 35 52 33 47 Z' fill='%23ff0055' stroke='%23ffd166' stroke-width='2'/%3E%3Cpath d='M52 38 L67 38 L67 47 C65 52 55 52 54 49 Z' fill='%23b026ff' stroke='%23ffd166' stroke-width='2'/%3E%3C/svg%3E"/>
-        <strong class="font-heading" style="font-size:12px;">MANAGER TIM // ASSISTANT</strong>
+        <img alt="" style="width:26px; height:26px; border-radius:50%; border:1.5px solid var(--accent);"
+          src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23141120'/%3E%3Cpath d='M16 100 C18 74 82 74 84 100 Z' fill='%230b0912'/%3E%3Cpath d='M31 44 C31 24 69 24 69 44 C69 62 59 69 50 69 C41 69 31 62 31 44 Z' fill='%23e5aa7d'/%3E%3Cpath d='M29 41 C28 22 44 15 58 18 C68 20 72 30 70 40 C64 30 38 28 29 41 Z' fill='%232c2936'/%3E%3Cpath d='M33 38 L48 38 L46 49 C45 52 35 52 33 47 Z' fill='%23ff0055' stroke='%23ffd166' stroke-width='2'/%3E%3Cpath d='M52 38 L67 38 L67 47 C65 52 55 52 54 49 Z' fill='%23b026ff' stroke='%23ffd166' stroke-width='2'/%3E%3C/svg%3E" />
+        <strong class="font-heading" id="manager-tim-drawer-title" style="font-size:12px;">MANAGER TIM //
+          ASSISTANT</strong>
       </div>
-      <button type="button" class="btn btn-ghost btn-icon" id="social-hub-close" style="width:28px; height:28px;">✕</button>
+      <button type="button" class="btn btn-ghost btn-icon" id="social-hub-close"
+        style="width:28px; height:28px;">✕</button>
     </div>
     <div class="agent-quick-chips" id="agent-quick-chips"></div>
     <div class="drawer-body" id="social-hub-body"></div>
     <form class="agent-chat-composer" id="agent-chat-form">
-      <input type="text" class="form-control" id="agent-chat-input" placeholder="Ask Manager Tim about badges, rankings, challenges..."/>
+      <input type="text" class="form-control" id="agent-chat-input"
+        placeholder="Ask Manager Tim about badges, rankings, challenges..." />
       <button type="submit" class="btn btn-primary btn-sm" style="height:38px;">Send</button>
     </form>
   </div>
 
   <div class="modal-backdrop hidden" id="modal-backdrop"></div>
   <div class="level-up-overlay hidden" id="level-up-overlay"></div>
+  <div class="profile-transition-bar" id="profile-transition-bar" aria-hidden="true"></div>
   <div class="toast-stack" id="toast-stack"></div>
 
   <script src="js/data.js"></script>
   <script src="js/charts.js"></script>
   <script src="js/app.js"></script>
 </body>
+
 </html>

@@ -6,7 +6,7 @@
   <title>Communitraders // Noir Vice HUD Design Mockups</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Orbitron:wght@600;700;800&family=Oxanium:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Manrope:wght@600;700;800&family=Orbitron:wght@600;700;800&family=Oxanium:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/tokens.css"/>
   <link rel="stylesheet" href="css/styles.css"/>
   <style>
@@ -112,7 +112,12 @@
       </div>
     </a>
     <div class="login-topbar-actions">
-      <button type="button" class="theme-toggle-btn" id="theme-toggle-mockups" aria-label="Toggle Light/Dark Mode">☀ Light</button>
+      <div class="mode-switcher-pill" role="group" aria-label="Interface Mode">
+        <button type="button" class="mode-switch-btn" data-set-theme="dark">Dark</button>
+        <button type="button" class="mode-switch-btn" data-set-theme="light">Light</button>
+        <button type="button" class="mode-switch-btn" data-set-theme="serious">Serious Mode</button>
+      </div>
+      <a href="index.html?theme=serious&role=login" class="btn btn-primary btn-sm">Serious Mode Live ↗</a>
       <a href="index.html?role=login" class="btn btn-ghost btn-sm">Login Screen</a>
       <a href="index.html?role=follower&view=discover" class="btn btn-purple btn-sm">Follower Discover</a>
       <a href="index.html?role=provider&view=challenge" class="btn btn-primary btn-sm">Signal Challenge</a>
@@ -124,10 +129,10 @@
       <div style="max-width: 680px;">
         <div class="hud-tag" style="margin-bottom:14px;">
           <span class="hud-dot"></span>
-          <span>NOIR VICE HUD // DESIGN SYSTEM</span>
+          <span id="mockups-hero-tag">NOIR VICE HUD // DESIGN SYSTEM</span>
         </div>
-        <h1>COMMUNITRADERS <span style="color:var(--accent);">VICE HUD EDITION</span></h1>
-        <p style="color:var(--text-secondary); margin-top:10px; font-size:14.5px;">
+        <h1 id="mockups-hero-title">COMMUNITRADERS <span style="color:var(--accent);">VICE HUD EDITION</span></h1>
+        <p id="mockups-hero-desc" style="color:var(--text-secondary); margin-top:10px; font-size:14.5px;">
           Obsidian Black &amp; <span class="font-mono" style="color:var(--accent);">#FF0055</span> architecture paired with electric neon purple (<span class="font-mono" style="color:var(--neon-purple-bright);">#B026FF</span>), Orbitron titles, original logos, updated Follower Discover, and the Signal Provider Challenge window.
         </p>
       </div>
@@ -192,6 +197,40 @@
           <div class="swatch-box" style="background:#c04cfd;"></div>
           <strong>Orchid Violet</strong>
           <div class="font-mono" style="font-size:11px; color:var(--text-muted);">#C04CFD</div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px; padding-top:18px; border-top:1px solid var(--border-subtle);">
+        <div class="card-header-flex" style="margin-bottom:12px;">
+          <strong class="font-heading" style="font-size:14px;">Serious Mode // Corporate Palette &amp; Typography</strong>
+          <span class="badge badge-accent">Manrope + Inter + IBM Plex Mono</span>
+        </div>
+        <div class="palette-grid">
+          <div class="swatch-card">
+            <div class="swatch-box" style="background:#050507;"></div>
+            <strong>Obsidian Black</strong>
+            <div class="font-mono" style="font-size:11px; color:var(--text-muted);">#050507</div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-box" style="background:#0e0e12;"></div>
+            <strong>Matte Carbon Surface</strong>
+            <div class="font-mono" style="font-size:11px; color:var(--text-muted);">#0E0E12</div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-box" style="background:#d60093;"></div>
+            <strong>Executive Magenta</strong>
+            <div class="font-mono" style="font-size:11px; color:var(--text-muted);">#D60093</div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-box" style="background:#ff8d35;"></div>
+            <strong>Refined Amber</strong>
+            <div class="font-mono" style="font-size:11px; color:var(--text-muted);">#FF8D35</div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-box" style="background:linear-gradient(90deg, #050507 0%, #d60093 52%, #ff8d35 100%);"></div>
+            <strong>Serious Mode Spectrum</strong>
+            <div class="font-mono" style="font-size:11px; color:var(--text-muted);">#050507 • #D60093 • #FF8D35</div>
+          </div>
         </div>
       </div>
     </section>
@@ -393,19 +432,52 @@
   </main>
   <script>
     (function () {
-      const btn = document.getElementById('theme-toggle-mockups');
-      let theme = localStorage.getItem('communitraders_theme') || 'dark';
+      const allowed = ['dark', 'light', 'serious'];
+      const stored = localStorage.getItem('communitraders_theme');
+      let theme = allowed.includes(stored) ? stored : 'dark';
       function sync() {
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('communitraders_theme', theme);
-        btn.textContent = theme === 'dark' ? '☀ Light' : '🌙 Dark';
+        const isSerious = theme === 'serious';
+        const tagEl = document.getElementById('mockups-hero-tag');
+        const titleEl = document.getElementById('mockups-hero-title');
+        const descEl = document.getElementById('mockups-hero-desc');
+        if (tagEl) tagEl.textContent = isSerious ? 'SERIOUS MODE // CORPORATE DESIGN SYSTEM' : 'NOIR VICE HUD // DESIGN SYSTEM';
+        if (titleEl) {
+          titleEl.innerHTML = isSerious
+            ? 'Communitraders <span style="color:var(--accent);">Serious Mode</span>'
+            : 'COMMUNITRADERS <span style="color:var(--accent);">VICE HUD EDITION</span>';
+        }
+        if (descEl) {
+          descEl.innerHTML = isSerious
+            ? 'Matte Obsidian Black (<span class="font-mono">#050507</span>), <span class="font-mono" style="color:var(--accent);">#D60093</span>, and <span class="font-mono" style="color:var(--neon-purple-bright);">#FF8D35</span> paired with Manrope &amp; Inter typography, desaturated imagery, and a refined corporate trading interface.'
+            : 'Obsidian Black &amp; <span class="font-mono" style="color:var(--accent);">#FF0055</span> architecture paired with electric neon purple (<span class="font-mono" style="color:var(--neon-purple-bright);">#B026FF</span>), Orbitron titles, original logos, updated Follower Discover, and the Signal Provider Challenge window.';
+        }
+        document.querySelectorAll('.mode-switch-btn[data-set-theme]').forEach((b) => {
+          b.classList.toggle('active', b.dataset.setTheme === theme);
+        });
         document.querySelectorAll('iframe').forEach((f) => {
-          try { f.contentDocument?.documentElement?.setAttribute('data-theme', theme); } catch (_) {}
+          try {
+            f.contentDocument?.documentElement?.setAttribute('data-theme', theme);
+            if (f.contentWindow && f.contentWindow.location) {
+              const url = new URL(f.contentWindow.location.href);
+              url.searchParams.set('theme', theme);
+            }
+          } catch (_) {}
         });
       }
-      btn.addEventListener('click', () => {
-        theme = theme === 'dark' ? 'light' : 'dark';
-        sync();
+      document.querySelectorAll('.mode-switch-btn[data-set-theme]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          theme = btn.dataset.setTheme;
+          sync();
+          document.querySelectorAll('iframe').forEach((f) => {
+            try {
+              const srcUrl = new URL(f.getAttribute('src'), window.location.href);
+              srcUrl.searchParams.set('theme', theme);
+              f.setAttribute('src', srcUrl.pathname.split('/').pop() + srcUrl.search);
+            } catch (_) {}
+          });
+        });
       });
       sync();
     })();

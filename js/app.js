@@ -131,28 +131,78 @@
     return Data.avatars[avatarKey] || Data.avatars.cyberChart;
   }
 
-  function applyTheme(themeName) {
-    state.theme = themeName === 'light' ? 'light' : 'dark';
+  function syncModeCopy() {
+    const isSerious = state.theme === 'serious';
+    const setText = (sel, val) => {
+      const el = $(sel);
+      if (el) el.textContent = val;
+    };
+    const setHtml = (sel, val) => {
+      const el = $(sel);
+      if (el) el.innerHTML = val;
+    };
+
+    setText('#login-ticker-status', isSerious ? '● FEED // ONLINE' : '● SYNDICATE SERVER // ONLINE');
+    setText('#login-hero-tag', isSerious ? 'COMMUNITRADERS' : 'SEASON');
+    setHtml(
+      '#login-hero-title',
+      isSerious
+        ? 'Follow experienced traders or share your own trading expertise!'
+        : 'TRADE LIKE A BOSS. <span class="highlight-vice">OWN THE SYNDICATE.</span>'
+    );
+    setHtml(
+      '#login-hero-sub',
+      isSerious
+        ? 'Access Communitraders as a <strong>Follower</strong> or <strong>Signal Provider</strong> using your MetaTrader credentials.'
+        : "Enter Tradeview's next-gen copy-trading arena. Mirror elite strategies as a <strong>Follower</strong> or command followers as a <strong>Signal Provider</strong>."
+    );
+    setText('#stage-chip-left', isSerious ? 'MT4 & MT5' : 'HOLO-DESK // MT4 & MT5');
+    setText('#stage-chip-right', isSerious ? '12 STRATEGIES' : '12 STRATEGIES ONLINE');
+    setText('#stage-rank-title', isSerious ? 'Communitraders Platform' : 'COMMUNITRADERS COPY-TRADING TERMINAL');
+    setText('#demo-accounts-heading', isSerious ? 'Quick demo access' : 'Select Trader Class // 1-Click Test Login');
+    setText('#demo-follower-class', isSerious ? 'Follower account' : 'CLASS // MIRROR OPS');
+    setText('#demo-provider-class', isSerious ? 'Signal provider account' : 'CLASS // SYNDICATE LEAD');
+    setText('#login-terminal-label', isSerious ? 'MetaTrader Login' : 'TERMINAL // AUTH GATEWAY');
+    setText('#login-submit-btn', isSerious ? 'Login' : 'Enter Vice Terminal →');
+    setText('#manager-tim-drawer-title', isSerious ? 'Social Hub' : 'MANAGER TIM // ASSISTANT');
+    setText('#social-hub-fab-label', isSerious ? 'Social Hub' : 'Manager Tim');
+  }
+
+  function applyTheme(themeName, shouldRerender = false) {
+    const allowed = ['dark', 'light', 'serious'];
+    state.theme = allowed.includes(themeName) ? themeName : 'dark';
     document.documentElement.setAttribute('data-theme', state.theme);
     localStorage.setItem('communitraders_theme', state.theme);
-    const label = state.theme === 'dark' ? '☀ Light' : '🌙 Dark';
-    const loginBtn = $('#theme-toggle-login');
-    const appBtn = $('#theme-toggle-app');
-    const dropBtn = $('#dropdown-theme-toggle');
-    if (loginBtn) loginBtn.textContent = label;
-    if (appBtn) appBtn.textContent = label;
-    if (dropBtn) {
-      dropBtn.textContent = state.theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+
+    $$('.mode-switch-btn[data-set-theme]').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.setTheme === state.theme);
+    });
+    $$('.dropdown-item[data-set-theme]').forEach((btn) => {
+      const active = btn.dataset.setTheme === state.theme;
+      btn.style.fontWeight = active ? '700' : '';
+      btn.style.color = active ? 'var(--accent)' : '';
+    });
+
+    syncModeCopy();
+
+    if (shouldRerender && (state.isAuthenticated || state.publicLeaderboardsOpen)) {
+      if (state.isAuthenticated) renderSidebar();
+      renderMainView();
     }
   }
 
-  function toggleTheme() {
-    applyTheme(state.theme === 'dark' ? 'light' : 'dark');
-    showToast(`${state.theme === 'light' ? 'Light' : 'Dark'} mode activated`);
+  function setTheme(themeName) {
+    applyTheme(themeName, true);
+    const labelMap = { dark: 'Dark Mode', light: 'Light Mode', serious: 'Serious Mode' };
+    showToast(`${labelMap[state.theme] || 'Dark Mode'} activated`);
   }
 
   function applyUrlParams() {
     const params = new URLSearchParams(window.location.search);
+    const themeParam = params.get('theme') || params.get('mode');
+    if (themeParam === 'dark' || themeParam === 'light' || themeParam === 'serious') {
+      applyTheme(themeParam, false);
+    }
     const role = params.get('role');
     const view = params.get('view');
     if (role === 'follower' || role === 'provider') {
@@ -169,6 +219,29 @@
     }
   }
 
+  function syncDemoSelection(roleKey) {
+    const fBtn = $('#demo-btn-follower');
+    const pBtn = $('#demo-btn-provider');
+    if (fBtn) fBtn.classList.toggle('is-selected', roleKey === 'follower');
+    if (pBtn) pBtn.classList.toggle('is-selected', roleKey === 'provider');
+  }
+
+  function triggerProfileTransition() {
+    if (state.theme === 'serious') return;
+    const appShell = $('#app-shell');
+    const bar = $('#profile-transition-bar');
+    if (appShell) {
+      appShell.classList.remove('profile-entering');
+      void appShell.offsetWidth;
+      appShell.classList.add('profile-entering');
+    }
+    if (bar) {
+      bar.classList.remove('active');
+      void bar.offsetWidth;
+      bar.classList.add('active');
+    }
+  }
+
   function fillDemoCredentials(roleKey) {
     const user = roleKey === 'follower' ? Data.users.follower : Data.users.provider;
     $('#login-account').value = user.id;
@@ -178,6 +251,7 @@
     $('#login-server').value = user.server;
     $('#login-terms').checked = true;
     $('#login-error').classList.add('hidden');
+    syncDemoSelection(roleKey);
   }
 
   function loginAs(roleKey, customId) {
@@ -194,6 +268,7 @@
     }
 
     renderRoot();
+    triggerProfileTransition();
 
     // Proactive Manager Tim greeting alert on login
     const alertPreset =
@@ -246,7 +321,7 @@
       loginShell.classList.add('hidden');
       appShell.classList.remove('hidden');
       $('#app-sidebar').classList.add('hidden');
-      $('#topbar-kpi-strip').innerHTML = `<span class="badge badge-purple">PUBLIC RANKING PORTAL // MULTI-MAM &amp; COMMUNITRADERS</span>`;
+      $('#topbar-kpi-strip').innerHTML = `<span class="badge badge-purple">PUBLIC RANKING PORTAL // COMMUNITRADERS RANKINGS</span>`;
       $('#switch-to-follower').parentElement.classList.add('hidden');
       $('#user-menu-trigger').parentElement.classList.add('hidden');
       $('#social-hub-fab').classList.add('hidden');
@@ -289,10 +364,9 @@
       <div class="kpi-item"><span class="kpi-label">Balance</span><span class="kpi-value">${k.balance}</span></div>
       <div class="kpi-item"><span class="kpi-label">Credit</span><span class="kpi-value">${k.credit}</span></div>
       <div class="kpi-item"><span class="kpi-label">Equity</span><span class="kpi-value">${k.equity}</span></div>
-      ${
-        isProvider
-          ? `<div class="kpi-item"><span class="kpi-label">Risk</span><span class="kpi-risk-pill">${k.risk}</span></div>`
-          : ''
+      ${isProvider
+        ? `<div class="kpi-item"><span class="kpi-label">Risk</span><span class="kpi-risk-pill">${k.risk}</span></div>`
+        : ''
       }
     `;
 
@@ -312,19 +386,19 @@
 
     const navItems = isProvider
       ? [
-          { id: 'profile', label: 'My profile', icon: 'compass' },
-          { id: 'challenge', label: 'Season Challenges', icon: 'trophy' },
-          { id: 'leaderboards', label: 'Global Leaderboards', icon: 'crown' },
-          { id: 'followers', label: 'Followers', icon: 'users' },
-          { id: 'orders', label: 'Orders', icon: 'orders' }
-        ]
+        { id: 'profile', label: 'My profile', icon: 'compass' },
+        { id: 'challenge', label: 'Season Challenges', icon: 'trophy' },
+        { id: 'leaderboards', label: 'Global Leaderboards', icon: 'crown' },
+        { id: 'followers', label: 'Followers', icon: 'users' },
+        { id: 'orders', label: 'Orders', icon: 'orders' }
+      ]
       : [
-          { id: 'following', label: 'Following settings', icon: 'trend' },
-          { id: 'discover', label: 'Discover', icon: 'users' },
-          { id: 'leaderboards', label: 'Global Leaderboards', icon: 'crown' },
-          { id: 'challenge', label: 'Season Challenges', icon: 'trophy' },
-          { id: 'orders', label: 'Orders', icon: 'orders' }
-        ];
+        { id: 'following', label: 'Following settings', icon: 'trend' },
+        { id: 'discover', label: 'Discover', icon: 'users' },
+        { id: 'leaderboards', label: 'Global Leaderboards', icon: 'crown' },
+        { id: 'challenge', label: 'Season Challenges', icon: 'trophy' },
+        { id: 'orders', label: 'Orders', icon: 'orders' }
+      ];
 
     const toggleChecked = isProvider ? user.visibility : user.copyStatus;
     const toggleLabel = isProvider ? 'Visibility' : 'Copy status';
@@ -346,21 +420,21 @@
 
         <nav class="sidebar-nav">
           ${navItems
-            .map(
-              (item) => `
+        .map(
+          (item) => `
             <button type="button" class="nav-item ${state.activeView === item.id ? 'active' : ''}" data-nav="${item.id}">
               ${getNavIcon(item.icon)}
               <span>${item.label}</span>
             </button>
           `
-            )
-            .join('')}
+        )
+        .join('')}
         </nav>
       </div>
 
       <div class="sidebar-footer-card">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span class="font-heading" style="font-size:11px; color:var(--neon-purple-bright);">HUD // ${escapeHtml(user.platform)}</span>
+          <span class="font-heading" style="font-size:11px; color:var(--neon-purple-bright);">${state.theme === 'serious' ? 'Platform' : 'HUD'} // ${escapeHtml(user.platform)}</span>
           <span class="badge badge-profit">LIVE</span>
         </div>
         <div class="font-mono" style="font-size:11px; color:var(--text-muted);">${escapeHtml(user.server)}</div>
@@ -454,18 +528,17 @@
 
         <div class="badges-grid">
           ${state.badges
-            .map((b) => {
-              const tier = roleKey === 'provider' ? b.providerTier : b.followerTier;
-              const isLocked = !tier;
-              return `
+        .map((b) => {
+          const tier = roleKey === 'provider' ? b.providerTier : b.followerTier;
+          const isLocked = !tier;
+          return `
                 <article class="badge-tile ${isLocked ? 'locked' : ''}" title="${escapeHtml(b.criteria)}">
                   <div class="badge-tile-top">
                     <div class="badge-emblem">${b.icon}</div>
-                    ${
-                      tier
-                        ? `<span class="tier-pill tier-${escapeHtml(tier)}">${escapeHtml(tier)}</span>`
-                        : `<span class="badge badge-neutral" style="font-size:9.5px;">Locked</span>`
-                    }
+                    ${tier
+              ? `<span class="tier-pill tier-${escapeHtml(tier)}">${escapeHtml(tier)}</span>`
+              : `<span class="badge badge-neutral" style="font-size:9.5px;">Locked</span>`
+            }
                   </div>
                   <div class="badge-title">${escapeHtml(b.name)}</div>
                   <div class="badge-desc">${escapeHtml(b.desc)}</div>
@@ -474,44 +547,298 @@
                   </div>
                 </article>
               `;
-            })
-            .join('')}
+        })
+        .join('')}
         </div>
       </section>
     `;
   }
 
   function renderBullCandlesSvg() {
+    const isSerious = state.theme === 'serious';
+    const c1 = isSerious ? '#d60093' : '#e81c7b';
+    const c2 = isSerious ? '#ff8d35' : '#f7944d';
+    const c3 = isSerious ? '#a34d84' : '#c04cfd';
+
     return `
-      <div class="colorimetria-bull-art">
-        <svg viewBox="0 0 260 175" width="100%" height="100%" aria-hidden="true">
-          <defs>
-            <linearGradient id="bullRay" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0%" stop-color="#e81c7b" stop-opacity="0.1"/>
-              <stop offset="100%" stop-color="#f7944d" stop-opacity="0.75"/>
-            </linearGradient>
-            <linearGradient id="bullBody" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#353147"/>
-              <stop offset="100%" stop-color="#14121d"/>
-            </linearGradient>
-          </defs>
-          <!-- Candlestick Backdrop -->
-          <g opacity="0.35">
-            <line x1="28" y1="35" x2="28" y2="115" stroke="#e81c7b" stroke-width="2"/><rect x="23" y="52" width="10" height="40" rx="2" fill="#e81c7b"/>
-            <line x1="56" y1="25" x2="56" y2="105" stroke="#c04cfd" stroke-width="2"/><rect x="51" y="42" width="10" height="36" rx="2" fill="#c04cfd"/>
-            <line x1="84" y1="45" x2="84" y2="125" stroke="#f7944d" stroke-width="2"/><rect x="79" y="60" width="10" height="42" rx="2" fill="#f7944d"/>
-            <line x1="112" y1="18" x2="112" y2="95" stroke="#e81c7b" stroke-width="2"/><rect x="107" y="34" width="10" height="38" rx="2" fill="#e81c7b"/>
-          </g>
-          <!-- Neon Diagonal Beams -->
-          <path d="M120 175 L260 20 L260 55 L155 175 Z" fill="url(#bullRay)" opacity="0.45"/>
-          <line x1="110" y1="175" x2="260" y2="28" stroke="#e81c7b" stroke-width="2.5"/>
-          <!-- Pedestal -->
-          <rect x="82" y="138" width="112" height="37" rx="4" fill="#181624" stroke="#e81c7b" stroke-opacity="0.4"/>
-          <!-- Stylized Metallic Bull Silhouette -->
-          <path d="M98 138 L104 108 L92 98 C86 92 92 80 104 82 L114 76 L108 62 L120 72 L130 62 L126 76 C144 74 166 78 180 94 L188 120 L182 138 L168 138 L168 118 L150 120 L146 138 L134 138 L134 118 L114 122 L110 138 Z" fill="url(#bullBody)" stroke="#f7944d" stroke-opacity="0.55" stroke-width="1.3"/>
-        </svg>
-      </div>
-    `;
+    <div class="colorimetria-bull-art">
+      <svg viewBox="0 0 260 175" width="100%" height="100%" aria-hidden="true">
+        <defs>
+          <linearGradient id="bullRay" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stop-color="${c1}" stop-opacity="0.1"/>
+            <stop offset="100%" stop-color="${c2}" stop-opacity="0.75"/>
+          </linearGradient>
+
+          <!-- Realistic Cast Bronze / Dark Patina Gradients -->
+          <linearGradient id="bronzeBase" x1="0.15" y1="0" x2="0.85" y2="1">
+            <stop offset="0%" stop-color="#3c354f"/>
+            <stop offset="40%" stop-color="#221e2e"/>
+            <stop offset="80%" stop-color="#14111c"/>
+            <stop offset="100%" stop-color="#0b0910"/>
+          </linearGradient>
+
+          <linearGradient id="bronzeMuscle" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="${c2}" stop-opacity="0.78"/>
+            <stop offset="45%" stop-color="${c3}" stop-opacity="0.52"/>
+            <stop offset="100%" stop-color="#1b1826" stop-opacity="0.9"/>
+          </linearGradient>
+
+          <linearGradient id="bronzeSpecular" x1="0" y1="0" x2="0.7" y2="1">
+            <stop offset="0%" stop-color="#ffd1a6"/>
+            <stop offset="35%" stop-color="${c2}"/>
+            <stop offset="85%" stop-color="${c1}"/>
+            <stop offset="100%" stop-color="${c3}"/>
+          </linearGradient>
+
+          <linearGradient id="hornGrad" x1="0" y1="1" x2="0.3" y2="0">
+            <stop offset="0%" stop-color="#2a2438"/>
+            <stop offset="30%" stop-color="${c1}"/>
+            <stop offset="75%" stop-color="${c2}"/>
+            <stop offset="100%" stop-color="#ffe0be"/>
+          </linearGradient>
+
+          <radialGradient id="hoofShadow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#050408" stop-opacity="0.95"/>
+            <stop offset="100%" stop-color="#050408" stop-opacity="0"/>
+          </radialGradient>
+
+          <filter id="sculptGlow" x="-12%" y="-12%" width="124%" height="124%">
+            <feDropShadow dx="0" dy="1" stdDeviation="1.6" flood-color="${c2}" flood-opacity="0.3"/>
+          </filter>
+        </defs>
+
+        <!-- Candlestick Backdrop -->
+        <g opacity="0.35">
+          <line x1="28" y1="35" x2="28" y2="115" stroke="${c1}" stroke-width="2"/><rect x="23" y="52" width="10" height="40" rx="2" fill="${c1}"/>
+          <line x1="56" y1="25" x2="56" y2="105" stroke="${c3}" stroke-width="2"/><rect x="51" y="42" width="10" height="36" rx="2" fill="${c3}"/>
+          <line x1="84" y1="45" x2="84" y2="125" stroke="${c2}" stroke-width="2"/><rect x="79" y="60" width="10" height="42" rx="2" fill="${c2}"/>
+          <line x1="112" y1="18" x2="112" y2="95" stroke="${c1}" stroke-width="2"/><rect x="107" y="34" width="10" height="38" rx="2" fill="${c1}"/>
+        </g>
+
+        <!-- Neon Diagonal Beams -->
+        <path d="M120 175 L260 20 L260 55 L155 175 Z" fill="url(#bullRay)" opacity="0.45"/>
+        <line x1="110" y1="175" x2="260" y2="28" stroke="${c1}" stroke-width="2.5"/>
+
+        <!-- Beveled Cobblestone Plinth -->
+        <g>
+          <rect x="52" y="147" width="166" height="28" rx="4" fill="#15131f" stroke="${c1}" stroke-opacity="0.45"/>
+          <path d="M56 151 H214" stroke="${c2}" stroke-opacity="0.3" stroke-width="1"/>
+          <path d="M68 159 H90 M102 159 H128 M140 159 H166 M178 159 H202 M78 167 H106 M118 167 H148 M160 167 H190" stroke="${c3}" stroke-opacity="0.18" stroke-width="1.2" stroke-linecap="round"/>
+        </g>
+
+        <!-- Realistic Sculpted Charging Bull (Front-3/4 Angle) -->
+        <g transform="translate(8, 2)">
+          <!-- Individual Ground Contact Shadows -->
+          <ellipse cx="60" cy="144" rx="16" ry="3.2" fill="url(#hoofShadow)"/>
+          <ellipse cx="117" cy="133" rx="13" ry="2.8" fill="url(#hoofShadow)"/>
+          <ellipse cx="136" cy="146" rx="17" ry="3.5" fill="url(#hoofShadow)"/>
+          <ellipse cx="183" cy="138" rx="14" ry="3" fill="url(#hoofShadow)"/>
+
+          <!-- 1. WHIPPING TAIL (Rounded Tubular Volume + Hair Tuft) -->
+          <path d="
+            M 161 46
+            C 170 35, 168 19, 152 17
+            C 143 16, 139 23, 144 27
+            C 147 29, 150 25, 148 23
+            C 153 22, 160 27, 165 31
+            C 174 37, 188 37, 194 27
+            C 196 24, 192 22, 190 25
+            C 185 31, 175 30, 167 24
+            C 162 20, 157 17, 152 17
+            C 162 23, 163 36, 156 46
+            Z"
+            fill="url(#bronzeSpecular)"
+            stroke="#14111c"
+            stroke-width="0.6"
+          />
+          <!-- Tail Brush Tuft -->
+          <path d="M 190 25 C 193 21, 198 22, 197 27 C 196 30, 192 31, 189 29 Z" fill="${c2}"/>
+
+          <!-- 2. MAIN SCULPTED BODY & LIMBS -->
+          <path d="
+            M 135 34
+            C 126 34, 118 41, 112 48
+            C 100 53, 91 62, 87 74
+            L 64 113
+            L 48 134
+            C 45 140, 48 144, 58 144
+            C 67 144, 73 140, 73 134
+            L 72 125
+            L 98 103
+            C 103 110, 108 117, 111 122
+            L 106 128
+            C 105 132, 113 135, 123 133
+            L 129 124
+            L 134 119
+            L 125 136
+            C 121 142, 125 146, 136 146
+            C 146 146, 151 142, 149 136
+            L 158 124
+            L 172 114
+            L 173 129
+            C 170 134, 174 138, 183 138
+            C 192 138, 196 134, 193 129
+            L 192 106
+            C 198 95, 198 81, 193 70
+            C 194 61, 191 53, 184 48
+            C 174 41, 158 38, 144 37
+            C 140 35, 138 34, 135 34
+            Z"
+            fill="url(#bronzeBase)"
+            stroke="url(#bronzeSpecular)"
+            stroke-opacity="0.45"
+            stroke-width="1"
+            stroke-linejoin="round"
+          />
+
+          <!-- 3. ANATOMICAL MUSCLE RELIEF VOLUMES -->
+          <!-- Massive Trapezius & Shoulder Hump -->
+          <path d="
+            M 134 37
+            C 124 39, 117 48, 112 56
+            C 101 59, 93 67, 90 78
+            C 93 90, 101 99, 112 103
+            L 122 95
+            L 126 112
+            C 132 117, 143 117, 150 111
+            L 157 93
+            C 167 89, 175 82, 179 73
+            L 186 67
+            C 184 55, 173 45, 156 41
+            Z"
+            fill="url(#bronzeMuscle)"
+          />
+
+          <!-- Extended Right Foreleg (Deltoid, Bicep, Radius & Fetlock) -->
+          <path d="
+            M 111 54
+            C 99 58, 91 67, 88 76
+            L 64 114
+            L 50 133
+            C 54 135, 58 135, 62 133
+            L 74 115
+            C 80 105, 88 96, 95 87
+            C 95 75, 101 64, 113 59
+            Z"
+            fill="url(#bronzeSpecular)"
+            opacity="0.92"
+          />
+          <!-- Forearm Tendon & Muscle Crease -->
+          <path d="M 85 83 C 77 95, 70 108, 63 121" fill="none" stroke="#14111c" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>
+          <path d="M 96 67 C 92 75, 91 83, 94 90" fill="none" stroke="#14111c" stroke-width="1.1" stroke-linecap="round" opacity="0.6"/>
+
+          <!-- Back Crest & Spine Highlight -->
+          <path d="
+            M 134 35
+            C 138 37, 139 45, 137 54
+            L 149 57
+            C 155 51, 152 43, 145 38
+            C 141 35, 137 34, 134 35
+            Z"
+            fill="url(#bronzeSpecular)"
+          />
+          <path d="M 156 42 C 169 44, 181 51, 185 62 C 178 59, 170 55, 164 49 Z" fill="url(#bronzeSpecular)" opacity="0.85"/>
+
+          <!-- Lunging Front-Left Foreleg Muscle -->
+          <path d="M 157 94 L 142 121 L 137 134 L 147 133 L 166 114 L 173 97 Z" fill="url(#bronzeMuscle)"/>
+          <path d="M 159 101 L 148 122" stroke="url(#bronzeSpecular)" stroke-width="1.1" stroke-linecap="round" opacity="0.6"/>
+
+          <!-- Hind Leg Thigh Contour -->
+          <path d="M 183 78 C 188 89, 188 103, 183 116" fill="none" stroke="url(#bronzeSpecular)" stroke-width="1.3" stroke-linecap="round" opacity="0.55"/>
+
+          <!-- 4. CLOVEN HOOVES (Left/Right Keratin Split) -->
+          <!-- Front Right Hoof -->
+          <path d="M 48 135 C 46 142, 71 143, 73 135 L 71 131 L 51 132 Z" fill="url(#bronzeMuscle)"/>
+          <path d="M 48 135 C 47 141, 56 143, 60 142 L 60 132 L 51 132 Z" fill="url(#bronzeSpecular)"/>
+          <line x1="60" y1="133" x2="60" y2="143" stroke="#110e18" stroke-width="1.1"/>
+
+          <!-- Front Left Hoof -->
+          <path d="M 124 136 C 122 144, 150 144, 149 136 L 146 132 L 127 132 Z" fill="url(#bronzeMuscle)"/>
+          <path d="M 124 136 C 123 142, 132 144, 136 144 L 136 132 L 127 132 Z" fill="url(#bronzeSpecular)" opacity="0.85"/>
+          <line x1="136" y1="133" x2="136" y2="145" stroke="#110e18" stroke-width="1.1"/>
+
+          <!-- Back Hooves -->
+          <path d="M 106 128 C 106 132, 121 134, 126 128 L 124 124 L 109 125 Z" fill="url(#bronzeMuscle)"/>
+          <path d="M 173 129 C 171 136, 194 137, 193 129 L 191 125 L 175 125 Z" fill="url(#bronzeMuscle)"/>
+
+          <!-- 5. SCULPTED HEAD, SNOUT, EYES & HORNS -->
+          <!-- Head Cranium & Cheekbones -->
+          <path d="
+            M 123 64
+            C 134 60, 150 62, 161 69
+            L 158 84
+            L 149 101
+            C 148 107, 143 111, 137 111
+            C 131 111, 127 106, 127 100
+            L 123 83
+            Z"
+            fill="url(#bronzeBase)"
+          />
+
+          <!-- Broad Forehead & Nasal Bridge Highlight -->
+          <path d="
+            M 125 65
+            C 135 62, 148 64, 158 69
+            L 153 83
+            L 146 97
+            C 145 102, 142 105, 137 105
+            C 132 105, 129 102, 130 96
+            L 129 82
+            Z"
+            fill="url(#bronzeSpecular)"
+          />
+
+          <!-- Heavy Brow Ridges & Deep-Set Eyes -->
+          <path d="M 119 70 C 124 72, 129 75, 132 79 L 129 84 C 126 80, 122 77, 119 75 Z" fill="#120f1a"/>
+          <path d="M 164 74 C 159 76, 154 78, 151 82 L 153 87 C 156 83, 160 80, 164 78 Z" fill="#120f1a"/>
+          <!-- Specular Eye Glints -->
+          <circle cx="126" cy="78" r="1" fill="#ffe0be"/>
+          <circle cx="156" cy="81" r="1" fill="#ffe0be"/>
+
+          <!-- Ears (Tucked Behind Horns) -->
+          <path d="M 114 68 C 111 73, 114 79, 120 80 C 118 76, 117 72, 118 69 Z" fill="url(#bronzeSpecular)"/>
+          <path d="M 167 74 C 170 78, 168 83, 162 84 C 164 80, 165 77, 164 74 Z" fill="url(#bronzeMuscle)"/>
+
+          <!-- Muzzle, Flared Nostrils & Lower Lip -->
+          <path d="M 129 98 C 127 103, 131 108, 138 108 C 145 108, 149 103, 146 98 C 143 101, 133 101, 129 98 Z" fill="url(#bronzeMuscle)"/>
+          <!-- Nostrils -->
+          <ellipse cx="132.5" cy="102" rx="2" ry="1.3" transform="rotate(-18 132.5 102)" fill="#100d17"/>
+          <ellipse cx="142.5" cy="102" rx="2" ry="1.3" transform="rotate(18 142.5 102)" fill="#100d17"/>
+          <!-- Wet Nose Highlight & Chin -->
+          <path d="M 134 99.5 Q 137.5 101 141 99.5" fill="none" stroke="#ffe0be" stroke-width="0.9" stroke-linecap="round"/>
+          <path d="M 131 109.5 C 135 112, 141 112, 145 109.5" fill="none" stroke="url(#bronzeSpecular)" stroke-width="1.3" stroke-linecap="round"/>
+
+          <!-- Dewlap / Neck Skin Folds Under Chin -->
+          <path d="M 126 113 C 132 118, 143 118, 149 113" fill="none" stroke="url(#bronzeSpecular)" stroke-width="1.1" stroke-linecap="round" opacity="0.7"/>
+          <path d="M 129 117 C 134 121, 141 121, 146 117" fill="none" stroke="${c1}" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+
+          <!-- 6. TAPERED, ROUNDED HORNS -->
+          <!-- Viewer's Left Horn -->
+          <path d="
+            M 125 65
+            C 112 58, 109 42, 115 30
+            C 117 30, 119 35, 120 42
+            C 122 52, 128 58, 138 60
+            Z"
+            fill="url(#hornGrad)"
+            filter="url(#sculptGlow)"
+          />
+          <!-- Viewer's Right Horn -->
+          <path d="
+            M 157 69
+            C 172 68, 184 56, 187 42
+            C 189 42, 191 48, 190 56
+            C 188 72, 175 80, 158 75
+            Z"
+            fill="url(#hornGrad)"
+            filter="url(#sculptGlow)"
+          />
+          <!-- Horn Base Growth Rings -->
+          <path d="M 126 62 C 129 61, 132 61, 134 62 M 160 71 C 162 72, 165 73, 167 72" fill="none" stroke="#14111c" stroke-width="0.9" stroke-linecap="round" opacity="0.65"/>
+        </g>
+      </svg>
+    </div>
+  `;
   }
 
   function renderColorimetriaHero({ eyebrow, titleMain, titleAccent, subtitle, ctaHtml = '' }) {
@@ -556,13 +883,16 @@
     const user = state.followerUser;
     const strategy = user.followedStrategyId ? getStrategyById(user.followedStrategyId) : null;
 
-    const followerHero = renderColorimetriaHero({
-      eyebrow: 'Follower Hub & Progress',
-      titleMain: 'Follow. Trade.',
-      titleAccent: 'Achieve.',
-      subtitle: 'Monitor your active copy parameters, risk guardrails, and seasonal milestones.',
-      ctaHtml: `<button type="button" class="btn btn-primary btn-sm" id="follower-hero-challenges">Challenges →</button>`
-    });
+    const followerHero =
+      state.theme === 'serious'
+        ? ''
+        : renderColorimetriaHero({
+          eyebrow: 'Follower Hub & Progress',
+          titleMain: 'Follow. Trade.',
+          titleAccent: 'Achieve.',
+          subtitle: 'Monitor your active copy parameters, risk guardrails, and seasonal milestones.',
+          ctaHtml: `<button type="button" class="btn btn-primary btn-sm" id="follower-hero-challenges">Challenges →</button>`
+        });
 
     if (!strategy) {
       container.innerHTML = `
@@ -703,15 +1033,15 @@
           <div class="overview-header"><h3>Most traded symbols</h3></div>
           <div class="symbols-grid-3">
             ${strategy.topSymbols
-              .map(
-                (sym) => `
+        .map(
+          (sym) => `
               <div class="symbol-tile">
                 <div><div class="symbol-name">${escapeHtml(sym.symbol)}</div><div class="symbol-pct">${escapeHtml(sym.pct)}</div></div>
                 ${renderFlagPair(sym.flags)}
               </div>
             `
-              )
-              .join('')}
+        )
+        .join('')}
           </div>
         </div>
       </section>
@@ -723,8 +1053,8 @@
       <aside class="glass-card feed-card">
         <div class="feed-list">
           ${state.notes
-            .map(
-              (n) => `
+        .map(
+          (n) => `
             <div class="feed-note-item">
               <div class="feed-note-head">
                 <div class="feed-mini-avatar"><img src="${renderAvatarImg('cyberChart')}" alt="" width="30" height="30"/></div>
@@ -736,16 +1066,15 @@
               <div class="feed-note-body">${escapeHtml(n.text)}</div>
             </div>
           `
-            )
-            .join('')}
+        )
+        .join('')}
         </div>
-        ${
-          canWrite
-            ? `<div class="feed-footer-actions">
+        ${canWrite
+        ? `<div class="feed-footer-actions">
                  <button type="button" class="btn btn-purple btn-sm" id="btn-write-note">+ Write a note</button>
                </div>`
-            : ''
-        }
+        : ''
+      }
       </aside>
     `;
   }
@@ -763,10 +1092,10 @@
         <section class="glass-card hud-panel chart-card">
           <div class="tabs-bar">
             ${tabs
-              .map(
-                (t) => `<button type="button" class="tab-btn ${state.activeAnalyticsTab === t ? 'active' : ''}" data-analytics-tab="${t}">${tabLabels[t]}</button>`
-              )
-              .join('')}
+        .map(
+          (t) => `<button type="button" class="tab-btn ${state.activeAnalyticsTab === t ? 'active' : ''}" data-analytics-tab="${t}">${tabLabels[t]}</button>`
+        )
+        .join('')}
           </div>
 
           <div class="chart-controls-row" id="analytics-controls">
@@ -819,15 +1148,15 @@
         canvas.innerHTML = `
           <div style="display:flex; flex-direction:column; gap:10px; padding-top:8px;">
             ${Data.followersList
-              .map(
-                (f) => `
+            .map(
+              (f) => `
               <div class="metric-tile">
                 <div><strong>${escapeHtml(f.name)}</strong><div class="metric-tile-label">ID ${escapeHtml(f.login)}</div></div>
                 <span class="badge badge-purple">${escapeHtml(f.copyMode)}</span>
               </div>
             `
-              )
-              .join('')}
+            )
+            .join('')}
           </div>
         `;
       }
@@ -875,7 +1204,7 @@
       if (shareBtn) {
         shareBtn.addEventListener('click', () => {
           const url = `https://communitraders.tradeviewforex.com/ref/TV-SIG-2100224001`;
-          if (navigator.clipboard) navigator.clipboard.writeText(url).catch(() => {});
+          if (navigator.clipboard) navigator.clipboard.writeText(url).catch(() => { });
           showToast('Personalized manager referral link copied');
         });
       }
@@ -930,34 +1259,34 @@
     container.innerHTML = `
       <div class="view-container">
         ${renderColorimetriaHero({
-          eyebrow: 'MultiMAM & Communitraders Rankings',
-          titleMain: 'Compete. Rank.',
-          titleAccent: 'Lead.',
-          subtitle: 'Verified performance rankings across Money Managers and Signal Providers. Inspect public profiles, badges, and join directly.',
-          ctaHtml: `
+      eyebrow: 'Communitraders Rankings',
+      titleMain: 'Compete. Rank.',
+      titleAccent: 'Lead.',
+      subtitle: 'Verified performance rankings across Money Managers and Signal Providers. Inspect public profiles, badges, and join directly.',
+      ctaHtml: `
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
               ${isPublicPreview ? `<button type="button" class="btn btn-ghost btn-sm" id="lb-back-login">← Login</button>` : ''}
               <button type="button" class="btn btn-primary btn-sm" id="lb-open-account">Open Account</button>
             </div>
           `
-        })}
+    })}
 
         <section class="glass-card hud-panel table-panel">
           <div class="lb-tabs-scroll">
             ${Data.leaderboardTabs
-              .map(
-                (t) => `<button type="button" class="filter-pill ${tab === t.id ? 'active' : ''}" data-lb-tab="${t.id}">${escapeHtml(t.label)}</button>`
-              )
-              .join('')}
+        .map(
+          (t) => `<button type="button" class="filter-pill ${tab === t.id ? 'active' : ''}" data-lb-tab="${t.id}">${escapeHtml(t.label)}</button>`
+        )
+        .join('')}
           </div>
 
           <div class="lb-timeframe-bar">
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
               ${timeframes
-                .map(
-                  (f) => `<button type="button" class="btn btn-sm ${tf === f.id ? 'btn-primary' : 'btn-ghost'}" data-lb-tf="${f.id}">${f.label}</button>`
-                )
-                .join('')}
+        .map(
+          (f) => `<button type="button" class="btn btn-sm ${tf === f.id ? 'btn-primary' : 'btn-ghost'}" data-lb-tf="${f.id}">${f.label}</button>`
+        )
+        .join('')}
             </div>
             <span style="font-size:12px; color:var(--text-muted);">Verifiable live &amp; audited trade telemetry • No unverified churn metrics</span>
           </div>
@@ -980,11 +1309,11 @@
               </thead>
               <tbody>
                 ${rows
-                  .map((r, i) => {
-                    const ret = getReturnForTimeframe(r, tf);
-                    const topBadge = r.badges[0];
-                    return `
-                      <tr style="${r.isSelf ? 'background:rgba(255,0,85,0.08);' : ''}">
+        .map((r, i) => {
+          const ret = getReturnForTimeframe(r, tf);
+          const topBadge = r.badges[0];
+          return `
+                      <tr class="${r.isSelf ? 'is-self-row' : ''}">
                         <td class="font-mono" style="color:var(--neon-purple-bright); font-weight:700;">#${i + 1}</td>
                         <td>
                           <strong>${escapeHtml(r.name)}</strong>
@@ -1003,8 +1332,8 @@
                         </td>
                       </tr>
                     `;
-                  })
-                  .join('')}
+        })
+        .join('')}
               </tbody>
             </table>
           </div>
@@ -1069,8 +1398,8 @@
             <div class="form-label" style="margin-bottom:8px;">Unlocked Badges &amp; Tier Levels</div>
             <div class="share-row">
               ${entry.badges
-                .map((b) => `<span class="tier-pill tier-${escapeHtml(b.tier)}">${escapeHtml(b.tier)} • ${escapeHtml(b.name)}</span>`)
-                .join('')}
+        .map((b) => `<span class="tier-pill tier-${escapeHtml(b.tier)}">${escapeHtml(b.tier)} • ${escapeHtml(b.name)}</span>`)
+        .join('')}
             </div>
           </div>
 
@@ -1109,7 +1438,7 @@
     );
 
     $('#modal-copy-ref').addEventListener('click', () => {
-      if (navigator.clipboard) navigator.clipboard.writeText(refUrl).catch(() => {});
+      if (navigator.clipboard) navigator.clipboard.writeText(refUrl).catch(() => { });
       showToast('Referral link copied to clipboard');
     });
     $$('[data-share-social]').forEach((btn) => {
@@ -1183,7 +1512,9 @@
 
     container.innerHTML = `
       <div class="view-container">
-        ${renderColorimetriaHero({
+        ${state.theme === 'serious'
+        ? ''
+        : renderColorimetriaHero({
           eyebrow: 'Signal Marketplace & Discovery',
           titleMain: 'Explore. Copy.',
           titleAccent: 'Grow.',
@@ -1191,7 +1522,8 @@
           ctaHtml: followedStrat
             ? `<button type="button" class="btn btn-primary btn-sm" id="discover-goto-settings">Following Settings →</button>`
             : `<button type="button" class="btn btn-outline-pink btn-sm" id="discover-goto-lb">Leaderboards →</button>`
-        })}
+        })
+      }
 
         <div class="glass-card hud-panel discover-toolbar">
           <div class="discover-search-group">
@@ -1314,8 +1646,26 @@
   // 7 SEASON CHALLENGES WINDOW (TROPHIES, MEDALS, STARS, RANKS & LEVEL UP)
   // ==========================================================================
   function renderTrophyOrMedalSvg(kind, tier) {
-    const color =
-      tier === 'Legendary' ? '#e81c7b' : tier === 'Platinum' ? '#d580ff' : tier === 'Gold' ? '#ffd166' : tier === 'Silver' ? '#cbd5e1' : '#cd7f32';
+    const isSerious = state.theme === 'serious';
+    const color = isSerious
+      ? tier === 'Legendary'
+        ? '#d60093'
+        : tier === 'Platinum'
+          ? '#d4d4d8'
+          : tier === 'Gold'
+            ? '#ff8d35'
+            : tier === 'Silver'
+              ? '#a1aab8'
+              : '#b87b4b'
+      : tier === 'Legendary'
+        ? '#e81c7b'
+        : tier === 'Platinum'
+          ? '#d580ff'
+          : tier === 'Gold'
+            ? '#ffd166'
+            : tier === 'Silver'
+              ? '#cbd5e1'
+              : '#cd7f32';
     if (kind === 'medal') {
       return `
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
@@ -1348,6 +1698,7 @@
   function triggerLevelUpAnimation(newLevel, newRankName, rewardText) {
     const overlay = $('#level-up-overlay');
     if (!overlay) return;
+    const isSerious = state.theme === 'serious';
     overlay.innerHTML = `
       <div class="level-up-card">
         <div class="level-up-stars-row">
@@ -1358,9 +1709,9 @@
         </div>
         <div class="hud-tag" style="margin:0 auto 10px;">
           <span class="hud-dot"></span>
-          <span>PROFILE ADVANCEMENT // LEVEL UP</span>
+          <span>${isSerious ? 'ACCOUNT TIER // PROGRESSION' : 'PROFILE ADVANCEMENT // LEVEL UP'}</span>
         </div>
-        <h2 class="font-display" style="font-size:32px; color:#ffffff; margin-bottom:4px;">LEVEL ${newLevel} REACHED</h2>
+        <h2 class="font-display" style="font-size:32px; color:#ffffff; margin-bottom:4px;">${isSerious ? `Tier Level ${newLevel}` : `LEVEL ${newLevel} REACHED`}</h2>
         <div style="margin-bottom:12px;">
           <span class="tier-pill tier-${escapeHtml(newRankName)}">${escapeHtml(newRankName)} Rank</span>
         </div>
@@ -1388,12 +1739,12 @@
       <div class="view-container">
         <!-- Colorimetria Hero ("Grow. Trade. Achieve." + Level Shield + Bull & Candles) -->
         ${renderColorimetriaHero({
-          eyebrow: 'Levels & Achievements',
-          titleMain: 'Grow. Trade.',
-          titleAccent: 'Achieve.',
-          subtitle: 'Complete challenges, unlock achievements, and take your trading journey to the next level.',
-          ctaHtml: `<button type="button" class="btn btn-primary btn-sm" id="btn-simulate-levelup">⚡ Level Up Preview</button>`
-        })}
+      eyebrow: 'Levels & Achievements',
+      titleMain: 'Grow. Trade.',
+      titleAccent: 'Achieve.',
+      subtitle: 'Complete challenges, unlock achievements, and take your trading journey to the next level.',
+      ctaHtml: `<button type="button" class="btn btn-primary btn-sm" id="btn-simulate-levelup">${state.theme === 'serious' ? 'Tier Upgrade Preview' : '⚡ Level Up Preview'}</button>`
+    })}
 
         <!-- Highlighted Levels & Ranks Ladder -->
         <section class="glass-card hud-panel following-settings-card">
@@ -1403,10 +1754,10 @@
           </div>
           <div class="rank-ladder-strip">
             ${ch.ranksLadder
-              .map((r, idx) => {
-                const isCurrent = idx === ch.currentRankIndex;
-                const isPassed = idx < ch.currentRankIndex;
-                return `
+        .map((r, idx) => {
+          const isCurrent = idx === ch.currentRankIndex;
+          const isPassed = idx < ch.currentRankIndex;
+          return `
                   <div class="rank-step ${isCurrent ? 'current' : isPassed ? 'passed' : ''}">
                     ${renderTrophyOrMedalSvg(idx >= 3 ? 'trophy' : 'medal', r.name)}
                     <span class="tier-pill tier-${escapeHtml(r.name)}">${escapeHtml(r.name)}</span>
@@ -1415,8 +1766,8 @@
                     <div style="font-size:10.5px; color:var(--text-muted);">${escapeHtml(r.perk)}</div>
                   </div>
                 `;
-              })
-              .join('')}
+        })
+        .join('')}
           </div>
         </section>
 
@@ -1428,8 +1779,8 @@
           </div>
           <div class="trophy-cabinet-grid">
             ${ch.trophiesAndMedals
-              .map(
-                (tm) => `
+        .map(
+          (tm) => `
                 <article class="trophy-item-card">
                   <div class="trophy-icon-ring">${renderTrophyOrMedalSvg(tm.kind, tm.tier)}</div>
                   <span class="tier-pill tier-${escapeHtml(tm.tier)}">${escapeHtml(tm.tier)} ${tm.kind === 'trophy' ? 'Trophy' : 'Medal'}</span>
@@ -1438,8 +1789,8 @@
                   <div class="badge-desc">${escapeHtml(tm.desc)}</div>
                 </article>
               `
-              )
-              .join('')}
+        )
+        .join('')}
           </div>
         </section>
 
@@ -1455,13 +1806,13 @@
           <!-- 3-Column Colorimetria Challenge Grid (6 Cards + Manager League Banner below) -->
           <div class="challenges-catalog-grid">
             ${gridChallenges
-              .map((c, idx) => {
-                const isClaimed = c.status === 'claimed';
-                const isClaimable = c.status === 'claimable';
-                const iconKind = idx % 2 === 0 ? 'trophy' : 'medal';
-                const rewardTier = isClaimed ? 'Platinum' : isClaimable ? 'Gold' : 'Silver';
-                const stars = isClaimed ? 5 : isClaimable ? 4 : 3;
-                return `
+        .map((c, idx) => {
+          const isClaimed = c.status === 'claimed';
+          const isClaimable = c.status === 'claimable';
+          const iconKind = idx % 2 === 0 ? 'trophy' : 'medal';
+          const rewardTier = isClaimed ? 'Platinum' : isClaimable ? 'Gold' : 'Silver';
+          const stars = isClaimed ? 5 : isClaimable ? 4 : 3;
+          return `
                   <article class="glass-card challenge-full-card">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                       <div class="trophy-icon-ring" style="width:42px; height:42px;">${renderTrophyOrMedalSvg(iconKind, rewardTier)}</div>
@@ -1495,8 +1846,8 @@
                     </button>
                   </article>
                 `;
-              })
-              .join('')}
+        })
+        .join('')}
           </div>
         </section>
 
@@ -1597,12 +1948,11 @@
                 </tr>
               </thead>
               <tbody>
-                ${
-                  rows.length === 0
-                    ? `<tr><td colspan="9" class="empty-state-cell">No matching followers found</td></tr>`
-                    : rows
-                        .map(
-                          (f) => `
+                ${rows.length === 0
+        ? `<tr><td colspan="9" class="empty-state-cell">No matching followers found</td></tr>`
+        : rows
+          .map(
+            (f) => `
                     <tr>
                       <td class="font-mono" style="color:var(--neon-purple-bright);">${escapeHtml(f.login)}</td>
                       <td><strong>${escapeHtml(f.name)}</strong></td>
@@ -1615,9 +1965,9 @@
                       <td class="font-mono">${escapeHtml(f.maxDD)}</td>
                     </tr>
                   `
-                        )
-                        .join('')
-                }
+          )
+          .join('')
+      }
               </tbody>
             </table>
           </div>
@@ -1997,12 +2347,14 @@
     applyTheme(state.theme);
     applyUrlParams();
 
-    $('#theme-toggle-login').addEventListener('click', toggleTheme);
-    $('#theme-toggle-app').addEventListener('click', toggleTheme);
-    $('#dropdown-theme-toggle').addEventListener('click', () => {
-      state.userMenuOpen = false;
-      $('#user-dropdown').classList.add('hidden');
-      toggleTheme();
+    $$('[data-set-theme]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (state.userMenuOpen) {
+          state.userMenuOpen = false;
+          $('#user-dropdown')?.classList.add('hidden');
+        }
+        setTheme(btn.dataset.setTheme);
+      });
     });
 
     $('#login-leaderboards-btn').addEventListener('click', () => {
@@ -2012,6 +2364,8 @@
 
     $('#demo-btn-follower').addEventListener('click', () => { fillDemoCredentials('follower'); loginAs('follower'); });
     $('#demo-btn-provider').addEventListener('click', () => { fillDemoCredentials('provider'); loginAs('provider'); });
+    $('#login-role').addEventListener('change', (e) => syncDemoSelection(e.target.value));
+    syncDemoSelection($('#login-role').value || 'follower');
 
     $('#toggle-password-btn').addEventListener('click', () => {
       const inp = $('#login-password');
